@@ -23,5 +23,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
     sudo apt-get update
+    sudo apt-get install lxc lxc-templates python3-lxc python-virtualenv cgmanager-utils -y
+    sudo apt-get install lxd -t trusty-backports -y
   SHELL
 end
