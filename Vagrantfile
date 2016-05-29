@@ -5,7 +5,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.box = "ubuntu/trusty64"
 
-  config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 8080, host: 8080
 
   config.vm.synced_folder ".", "/home/vagrant/src"
 
@@ -22,8 +22,8 @@ Vagrant.configure(2) do |config|
   # SHELL
 
   config.vm.provision "shell", inline: <<-SHELL
+    sudo apt-get autoremove -y
     sudo apt-get update
-    sudo apt-get install lxc lxc-templates python3-lxc python-virtualenv cgmanager-utils -y
     sudo apt-get install lxd -t trusty-backports -y
   SHELL
 end
