@@ -24,7 +24,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: <<-SHELL
     sudo apt-get autoremove -y
     sudo apt-get update
-    sudo apt-get install python-virtualenv python2-dev libffi-dev libssl-dev -y
+    sudo apt-get install python-virtualenv python-dev libffi-dev libssl-dev -y
     sudo apt-get install lxd -t trusty-backports -y
   SHELL
 end
