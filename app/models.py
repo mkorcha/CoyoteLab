@@ -1,4 +1,4 @@
-from .. import db
+from . import db
 
 
 user_roles = db.Table('user_roles',
@@ -12,6 +12,7 @@ class User(db.Model):
 	password = db.Column(db.String(255), unique=True)
 	email    = db.Column(db.String(255), unique=True)
 	name     = db.Column(db.String(255))
+	
 	roles    = db.relationship('Role', secondary=user_roles, backref='users')
 
 class Role(db.Model):
