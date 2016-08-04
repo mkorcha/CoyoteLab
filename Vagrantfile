@@ -26,5 +26,9 @@ Vagrant.configure(2) do |config|
     sudo apt-get update
     sudo apt-get install python-virtualenv python-dev libffi-dev libssl-dev -y
     sudo apt-get install lxd -t trusty-backports -y
+    sudo apt-get install postgresql
+    sudo psql << "create database db;"
+    sudo psql << "create user dbuser with password 'dbuser';"
+    sudo psql << "grant ALL on DATABASE db to dbuser;"
   SHELL
 end

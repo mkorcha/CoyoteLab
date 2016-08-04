@@ -1,7 +1,7 @@
 from app import config, get_app
 
 
-app = get_app(config.DefaultConfig)
+app = get_app(config.DevConfig)
 
 
 if __name__ == '__main__':
