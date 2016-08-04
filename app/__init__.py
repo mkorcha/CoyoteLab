@@ -22,6 +22,6 @@ def get_app(config):
 
 
 	db.init_app(app)
-	migrate.init_app(app)
+	migrate.init_app(app, db)
 
 	return app
