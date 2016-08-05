@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from flask_kvsession import KVSessionExtension
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CsrfProtect
@@ -8,6 +9,7 @@ from flask_wtf.csrf import CsrfProtect
 db = SQLAlchemy()
 migrate = Migrate()
 csrf = CsrfProtect()
+session = KVSessionExtension()
 
 
 def get_app(config):
@@ -25,5 +27,6 @@ def get_app(config):
 	db.init_app(app)
 	migrate.init_app(app, db)
 	csrf.init_app(app)
+	session.init_app(app, app.config['SESSION_STORE'])
 
 	return app

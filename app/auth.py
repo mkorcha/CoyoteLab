@@ -9,7 +9,8 @@ def authenticate(username, password):
 	'''
 	user = User.query.filter_by(username=username).first()
 
-	if user and bcrypt.checkpw(password, user.password):
+	if user and bcrypt.checkpw(password.encode('utf-8'), 
+		                       user.password.encode('utf-8')):
 		return user
 
 	return None
@@ -34,10 +35,9 @@ def authenticated():
 	'''
 	return 'user' in session and session['user'] != None
 
-def hash(password):
+def pwhash(password):
 	'''
 	Returns a password hash created with bcrypt that is safe to store
 	'''
-	password = bytes(password, encoding='utf-8')
 	salt = bcrypt.gensalt(rounds=current_app.config['BCRYPT_WORK_FACTOR'])
-	return bcrypt.hashpw(password, salt)
+	return bcrypt.hashpw(password.encode('utf-8'), salt)

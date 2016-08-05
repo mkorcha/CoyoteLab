@@ -1,4 +1,5 @@
-import datetime, random, string
+import datetime, random, string, redis
+from simplekv.memory.redisstore import RedisStore
 
 class DefaultConfig:
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -11,7 +12,10 @@ class DefaultConfig:
 
 	JINJA_AUTO_RELOAD = True
 
-	BCRYPT_WORK_FACTOR = 16
+	BCRYPT_WORK_FACTOR = 12
+
+	SESSION_STORE = RedisStore(redis.StrictRedis())
+	
 	
 class DevConfig(DefaultConfig):
 	DEBUG = True

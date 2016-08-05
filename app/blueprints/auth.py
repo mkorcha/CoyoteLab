@@ -17,7 +17,7 @@ def courses():
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
 	if auth.authenticated():
-		return redirect(url_for('courses'))
+		return redirect(url_for('auth.courses'))
 
 	form = LoginForm()
 
@@ -27,7 +27,7 @@ def login():
 		if user:
 			auth.login(user)
 
-			return redirect(url_for('courses'))
+			return redirect(url_for('auth.courses'))
 		else:
 			flash('Invalid credentials.')
 
@@ -40,4 +40,4 @@ def logout():
 		auth.logout()
 		flash('You have been logged out.')
 
-	return redirect(url_for('login'))
+	return redirect(url_for('auth.login'))
