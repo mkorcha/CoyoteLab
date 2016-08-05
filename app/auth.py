@@ -7,7 +7,7 @@ def authenticate(username, password):
 	'''
 	Returns the User if the supplied credentials are correct, None otherwise
 	'''
-	user = User.query.filter_by(username=id).first()
+	user = User.query.filter_by(username=username).first()
 
 	if user and bcrypt.checkpw(password, user.password):
 		return user
@@ -32,7 +32,7 @@ def authenticated():
 	'''
 	Returns if the user is authenticated 
 	'''
-	return session.has_key('user') and session['user'] != None
+	return 'user' in session and session['user'] != None
 
 def hash(password):
 	'''
@@ -41,18 +41,3 @@ def hash(password):
 	password = bytes(password, encoding='utf-8')
 	salt = bcrypt.gensalt(rounds=current_app.config['BCRYPT_WORK_FACTOR'])
 	return bcrypt.hashpw(password, salt)
-
-def require_login():
-	'''
-	Decorator that requires a user be logged in to access a given functionality
-	'''
-	# TODO
-	pass
-
-def require_role(rank_id):
-	'''
-	Decorator that requires a user have a particular role to access a given
-	functionality
-	'''
-	# TODO
-	pass

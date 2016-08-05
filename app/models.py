@@ -6,6 +6,7 @@ user_roles = db.Table('user_roles',
 	db.Column('role', db.Integer, db.ForeignKey('role.id'))
 )
 
+
 class User(db.Model):
 	id       = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(32),  unique=True)
@@ -14,6 +15,7 @@ class User(db.Model):
 	name     = db.Column(db.String(255))
 	
 	roles    = db.relationship('Role', secondary=user_roles, backref='users')
+
 
 class Role(db.Model):
 	id   = db.Column(db.Integer, primary_key=True)
