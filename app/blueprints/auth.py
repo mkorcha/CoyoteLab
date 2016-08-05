@@ -8,6 +8,9 @@ blueprint = Blueprint('auth', __name__)
 
 @blueprint.route('/courses')
 def courses():
+	'''
+	Placeholder for courses view
+	'''
 	if auth.authenticated():
 		return "logged in!"
 	else:
@@ -16,6 +19,9 @@ def courses():
 
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
+	'''
+	Handles logging the user in
+	'''
 	if auth.authenticated():
 		return redirect(url_for('auth.courses'))
 
@@ -36,6 +42,9 @@ def login():
 
 @blueprint.route('/logout')
 def logout():
+	'''
+	Handles logging the user out
+	'''
 	if auth.authenticated():
 		auth.logout()
 		flash('You have been logged out.')

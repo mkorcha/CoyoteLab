@@ -1,6 +1,7 @@
 from . import db
 
 
+# Table for many-to-many relation between roles and users
 user_roles = db.Table('user_roles',
 	db.Column('user', db.Integer, db.ForeignKey('user.id')),
 	db.Column('role', db.Integer, db.ForeignKey('role.id'))
@@ -8,6 +9,9 @@ user_roles = db.Table('user_roles',
 
 
 class User(db.Model):
+	'''
+	Model representing a user
+	'''
 	id       = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(32),  unique=True)
 	password = db.Column(db.String(255), unique=True)
@@ -18,5 +22,8 @@ class User(db.Model):
 
 
 class Role(db.Model):
+	'''
+	Model representing a user role
+	'''
 	id   = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(255), unique=True)
