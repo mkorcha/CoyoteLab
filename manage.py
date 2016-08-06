@@ -1,6 +1,6 @@
 from flask_script import Manager, Shell, prompt_bool
 from flask_migrate import MigrateCommand
-from app import config, db, get_app, models
+from app import config, db, get_app, models, auth
 from app.models import User
 from app.auth import pwhash
 
@@ -33,6 +33,7 @@ def populate():
 	test_user.password = pwhash('password123')
 	test_user.email = 'test@weblab1.grad.cse.csusb.edu'
 	test_user.name = 'Mike'
+	test_user.roles = auth.ROLE_STUDENT
 	db.session.add(test_user)
 	db.session.commit()
 

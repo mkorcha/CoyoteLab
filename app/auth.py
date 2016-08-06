@@ -1,6 +1,11 @@
 import bcrypt
-from models import User, Role
+from models import User
 from flask import current_app, session
+
+
+ROLE_STUDENT    = 0b001
+ROLE_INSTRUCTOR = 0b001
+ROLE_ADMIN      = 0b100
 
 
 def authenticate(username, password):
