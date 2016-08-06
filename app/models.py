@@ -31,5 +31,5 @@ class Course(db.Model):
 	start_date    = db.Column(db.DateTime(), nullable=False)
 	end_date      = db.Column(db.DateTime(), nullable=False)
 
-	instructor = db.relationship('Instructor', backref=db.backref('courses'))
-	students   = db.relationship('User', secondary=user_courses, backref='courses')
+	instructor = db.relationship('User', backref='taught')
+	students   = db.relationship('User', secondary=user_courses, backref='enrolled')
