@@ -1,3 +1,4 @@
+from sqlalchemy.ext.hybrid import hybrid_property
 from . import db
 
 
@@ -18,6 +19,18 @@ class User(db.Model):
 	name     = db.Column(db.String(255))
 	roles    = db.Column(db.Integer, nullable=False, default=0)
 
+	taught   = db.relationship('Course', backref='instructor', lazy='joined')
+	enrolled = db.relationship('Course', 
+		                        secondary=user_courses,
+		                        backref=db.backref('_students'),
+		                        lazy='dynamic')
+
+	def has_role(self, role):
+		'''
+		Checks if the user has a role
+		'''
+		return bool(self.roles & role)
+
 
 class Course(db.Model):
 	'''
@@ -31,5 +44,11 @@ class Course(db.Model):
 	start_date    = db.Column(db.DateTime(), nullable=False)
 	end_date      = db.Column(db.DateTime(), nullable=False)
 
-	instructor = db.relationship('User', backref='taught')
-	students   = db.relationship('User', secondary=user_courses, backref='enrolled')
+	@hybrid_property
+	def students(self):
+		'''
+		Workaround, adding some nice syntax to get students until I figure out the
+		proper way to do it
+		'''
+		return Course.query.get(self.id)._students
+	

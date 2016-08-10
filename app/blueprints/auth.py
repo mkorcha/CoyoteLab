@@ -23,7 +23,7 @@ def login():
 	Handles logging the user in
 	'''
 	if auth.authenticated():
-		return redirect(url_for('auth.courses'))
+		return redirect(url_for('instructor.courses'))
 
 	form = LoginForm()
 
@@ -33,7 +33,7 @@ def login():
 		if user:
 			auth.login(user)
 
-			return redirect(url_for('auth.courses'))
+			return redirect(url_for('instructor.courses'))
 		else:
 			flash('Invalid credentials.')
 

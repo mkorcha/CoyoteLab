@@ -9,7 +9,7 @@ from flask import current_app, session
 # `ROLE_ADMIN | ROLE_INSTRUCTOR`. To check, you mask the user role with the 
 # constant like `user.roles & ROLE_ADMIN`
 ROLE_STUDENT    = 0b001
-ROLE_INSTRUCTOR = 0b001
+ROLE_INSTRUCTOR = 0b010
 ROLE_ADMIN      = 0b100
 
 
@@ -52,8 +52,8 @@ def pwhash(password):
 	salt = bcrypt.gensalt(rounds=current_app.config['BCRYPT_WORK_FACTOR'])
 	return bcrypt.hashpw(password.encode('utf-8'), salt)
 
-def has_role(user, role):
+def session_user():
 	'''
-	Checks if the user has a given role
+	Get the currently logged in user
 	'''
-	return user.roles & role
+	return session['user'] if 'user' in session else None

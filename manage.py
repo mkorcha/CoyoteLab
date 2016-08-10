@@ -1,7 +1,8 @@
+import datetime
 from flask_script import Manager, Shell, prompt_bool
 from flask_migrate import MigrateCommand
 from app import config, db, get_app, models, auth
-from app.models import User
+from app.models import User, Course
 from app.auth import pwhash
 
 
@@ -29,12 +30,30 @@ def reset():
 def populate():
 	'Create sample data for development purposes'
 	test_user = User()
-	test_user.username = 'mike'
+	test_user.username = 'mike-i'
 	test_user.password = pwhash('password123')
 	test_user.email = 'test@weblab1.grad.cse.csusb.edu'
 	test_user.name = 'Mike'
-	test_user.roles = auth.ROLE_STUDENT
+	test_user.roles = auth.ROLE_INSTRUCTOR
 	db.session.add(test_user)
+	db.session.commit()
+
+	test_user2 = User()
+	test_user2.username = 'mike-s'
+	test_user2.password = pwhash('password123')
+	test_user2.email = 'test2@weblab1.grad.cse.csusb.edu'
+	test_user2.name = 'Mike'
+	test_user2.roles = auth.ROLE_STUDENT
+	db.session.add(test_user2)
+	db.session.commit()
+
+	test_course = Course()
+	test_course.name = 'CSE 201-01'
+	test_course.instructor = test_user
+	test_course.start_date = datetime.datetime.today()
+	test_course.end_date = datetime.datetime.today() + datetime.timedelta(days=5)
+	test_course._students.append(test_user2)
+	db.session.add(test_course)
 	db.session.commit()
 
 	print("Sample data generated")
