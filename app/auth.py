@@ -31,7 +31,7 @@ def login(user):
 	the user being logged in is actually a user and has credentials
 	'''
 	if user:
-		session['user'] = user
+		session['user'] = user.id
 
 def logout():
 	'''
@@ -56,4 +56,4 @@ def session_user():
 	'''
 	Get the currently logged in user
 	'''
-	return session['user'] if 'user' in session else None
+	return User.query.get(session['user']) if 'user' in session else None

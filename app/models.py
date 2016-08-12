@@ -23,7 +23,7 @@ class User(db.Model):
 	enrolled = db.relationship('Course', 
 		                        secondary=user_courses,
 		                        backref=db.backref('_students'),
-		                        lazy='dynamic')
+		                        lazy='joined')
 
 	def has_role(self, role):
 		'''
@@ -44,6 +44,7 @@ class Course(db.Model):
 	start_date    = db.Column(db.DateTime(), nullable=False)
 	end_date      = db.Column(db.DateTime(), nullable=False)
 
+	
 	@hybrid_property
 	def students(self):
 		'''

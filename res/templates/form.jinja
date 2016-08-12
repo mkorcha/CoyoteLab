@@ -1,0 +1,20 @@
+{% macro render_field(field) %}
+	{% if field.name != 'csrf_token' %}
+		{{ field.label }}
+		{{ field(**kwargs)|safe }}
+		{% if field.errors %}
+			{% for error in errors %}
+				{{ error }}
+			{% endfor %}
+		{% endif %}
+	{% endif %}
+{% endmacro %}
+
+
+<form method="post">
+	{{ form.csrf_token }}
+
+	{% for field in form %}
+		{{ render_field(field) }}
+	{% endfor %}
+</form>
