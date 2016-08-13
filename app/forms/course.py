@@ -8,9 +8,9 @@ class CourseForm(Form):
 	Form used for adding and updating course information
 	'''
 	name        = StringField('Name', validators=[DataRequired()])
-	webpage     = StringField('Course Webpage', validators=[URL()])
+	webpage     = StringField('Course Webpage')
 	description = TextAreaField('Description')
 	start_date  = DateField('Start Date', validators=[DataRequired()])
 	end_date    = DateField('End Date', validators=[DataRequired()])
 
-	submit = SubmitField('Log In', validators=[DataRequired()])
+	submit = SubmitField('Submit', validators=[DataRequired()])

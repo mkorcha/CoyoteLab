@@ -39,3 +39,20 @@ def add_course():
 		return redirect(url_for('instructor.courses'))
 
 	return render_template('courses/edit.jinja', form=form)
+
+
+@blueprint.route('/course/<course_id>/edit', methods=['GET', 'POST'])
+def edit_course(course_id):
+	course = Course.query.get(course_id)
+	form = CourseForm(obj=course)
+
+	if form.validate_on_submit():
+		form.populate_obj(course)
+
+		db.session.commit()
+
+		flash('Course updated')
+
+		return redirect(url_for('instructor.courses'))
+
+	return render_template('courses/edit.jinja', form=form)

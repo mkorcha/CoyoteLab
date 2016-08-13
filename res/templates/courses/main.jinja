@@ -7,7 +7,7 @@
 {% if courses %}
 <ul>
 {% for course in courses %}
-	<li>{{ course.name }} - {{ course.students|count }} students. <a href="{{ url_for('main.hello') }}">Edit</a> <a href="{{ url_for('main.hello') }}">Students</a> <a href="{{ url_for('main.hello') }}">Workspace</a></li>
+	<li>{{ course.name }} - {{ course.students|count }} students. <a href="{{ url_for('instructor.edit_course', course_id=course.id) }}">Edit</a> <a href="{{ url_for('main.hello') }}">Students</a> <a href="{{ url_for('main.hello') }}">Workspace</a></li>
 {% endfor %}
 </ul>
 {% else %}
