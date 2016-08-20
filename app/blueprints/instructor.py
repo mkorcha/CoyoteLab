@@ -1,4 +1,4 @@
-from flask import Blueprint, session, redirect, render_template, url_for, flash
+from flask import Blueprint, session, redirect, render_template, url_for, flash, abort
 from ..auth import authenticated, session_user, ROLE_INSTRUCTOR
 from ..models import Course
 from ..forms.course import CourseForm
@@ -6,6 +6,20 @@ from .. import db
 
 
 blueprint = Blueprint('instructor', __name__, url_prefix='/instructor')
+
+
+def get_course(course_id):
+	'''
+	Returns a course from the given course_id if the course is taught by the
+	currently authenticated user. Otherwise, the application will display a 404
+	error
+	'''
+	course = Course.query.filter_by(id=course_id, instructor=session_user()).first()
+
+	if course == None:
+		abort(404)
+
+	return course
 
 
 @blueprint.before_request
@@ -43,7 +57,7 @@ def add_course():
 
 @blueprint.route('/course/<course_id>/edit', methods=['GET', 'POST'])
 def edit_course(course_id):
-	course = Course.query.get(course_id)
+	course = get_course(course_id)
 	form = CourseForm(obj=course)
 
 	if form.validate_on_submit():
@@ -60,7 +74,7 @@ def edit_course(course_id):
 
 @blueprint.route('/course/<course_id>/students')
 def students(course_id):
-	course = Course.query.get(course_id)
+	course = get_course(course_id)
 	return render_template('courses/students.jinja', course=course)
 
 
