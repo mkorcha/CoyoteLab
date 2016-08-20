@@ -56,3 +56,21 @@ def edit_course(course_id):
 		return redirect(url_for('instructor.courses'))
 
 	return render_template('courses/edit.jinja', form=form)
+
+
+@blueprint.route('/course/<course_id>/students')
+def students(course_id):
+	course = Course.query.get(course_id)
+	return render_template('courses/students.jinja', course=course)
+
+
+@blueprint.route('/course/<course_id>/students/add')
+def add_student(course_id):
+	pass
+
+
+@blueprint.route('/course/<course_id>/students/add_many')
+def add_many_students(course_id):
+	pass	
+
+

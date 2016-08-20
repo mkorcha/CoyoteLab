@@ -1,0 +1,17 @@
+{% if get_flashed_messages() %}
+<div class="alert">{{ get_flashed_messages()[0] }}</div>
+{% endif %}
+
+<h1>{{ course.name }}</h1>
+
+{% if course.students|count %}
+<ul>
+{% for student in course.students %}
+	<li>{{ student.name }} <a href="{{ url_for('main.hello') }}">Enable/Disable</a> <a href="{{ url_for('main.hello') }}">Workspace</a></li>
+{% endfor %}
+{% else %}
+No students found!
+{% endif %}
+
+<a href="{{ url_for('instructor.add_student', course_id=course.id) }}">Add Student</a>
+<a href="{{ url_for('instructor.add_many_students', course_id=course.id) }}">Add Many Students</a>
