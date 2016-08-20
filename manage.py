@@ -52,7 +52,7 @@ def populate():
 	test_course.instructor = test_user
 	test_course.start_date = datetime.datetime.today()
 	test_course.end_date = datetime.datetime.today() + datetime.timedelta(days=5)
-	test_course._students.append(test_user2)
+	test_course.students.append(test_user2)
 	db.session.add(test_course)
 	db.session.commit()
 

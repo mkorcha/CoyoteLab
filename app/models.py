@@ -1,11 +1,6 @@
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.ext.associationproxy import association_proxy
 from . import db
-
-
-user_courses = db.Table('user_courses', 
-	db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False),
-	db.Column('course_id', db.Integer, db.ForeignKey('course.id'), nullable=False)
-)
 
 
 class User(db.Model):
@@ -20,10 +15,7 @@ class User(db.Model):
 	roles    = db.Column(db.Integer, nullable=False, default=0)
 
 	taught   = db.relationship('Course', backref='instructor', lazy='joined')
-	enrolled = db.relationship('Course', 
-		                        secondary=user_courses,
-		                        backref=db.backref('_students'),
-		                        lazy='joined')
+	enrolled = association_proxy('enrollment_assoc', 'course')
 
 	def has_role(self, role):
 		'''
@@ -44,12 +36,24 @@ class Course(db.Model):
 	start_date    = db.Column(db.DateTime(), nullable=False)
 	end_date      = db.Column(db.DateTime(), nullable=False)
 
+	students = association_proxy('enrollment_assoc', 'user')
 	
-	@hybrid_property
-	def students(self):
-		'''
-		Workaround, adding some nice syntax to get students until I figure out the
-		proper way to do it
-		'''
-		return Course.query.get(self.id)._students
-	
+
+class Enrollment(db.Model):
+	'''
+	Model handling the association between a user and the courses they are 
+	enrolled in in a many-to-many relationship, with some added data
+	'''
+	__tablename__ = 'user_courses'
+
+	user_id   = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+	course_id = db.Column(db.Integer, db.ForeignKey('course.id'), primary_key=True)
+	enabled   = db.Column(db.Boolean, default=True)
+
+	user   = db.relationship('User', backref='enrollment_assoc')
+	course = db.relationship('Course', backref='enrollment_assoc')
+
+	def __init__(self, user=None, course=None, enabled=True):
+		self.user    = user
+		self.course  = course
+		self.enabled = enabled
