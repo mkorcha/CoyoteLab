@@ -14,17 +14,6 @@ def filter():
 		return redirect(url_for('auth.change_password'))
 
 
-@blueprint.route('/courses')
-def courses():
-	'''
-	Placeholder for courses view
-	'''
-	if auth.authenticated():
-		return "logged in!"
-	else:
-		return "logged out!"
-
-
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
 	'''
@@ -41,7 +30,13 @@ def login():
 		if user:
 			auth.login(user)
 
-			return redirect(url_for('instructor.courses'))
+			if user.has_role(auth.ROLE_STUDENT):
+				return redirect(url_for('student.courses'))
+
+			if user.has_role(auth.ROLE_INSTRUCTOR):
+				return redirect(url_for('instructor.courses'))
+
+			return redirect(url_for('main.hello'))
 		else:
 			flash('Invalid credentials.')
 

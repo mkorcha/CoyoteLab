@@ -7,7 +7,7 @@
 {% if course.students|count %}
 <ul>
 {% for student in course.students %}
-	<li>{{ student.name }} <a href="{{ url_for('instructor.toggle_enrollment', course_id=course.id, user_id=student.id) }}">{{ "Drop" if student.active_in(course) else "Add" }}</a> <a href="{{ url_for('main.hello') }}">Workspace</a></li>
+	<li>{{ student.name }} <a href="{{ url_for('instructor.toggle_enrollment', course_id=course.id, user_id=student.id) }}">{{ "Drop" if student.active_in(course) else "Re-add" }}</a> <a href="{{ url_for('main.hello') }}">Workspace</a></li>
 {% endfor %}
 {% else %}
 No students found!

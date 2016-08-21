@@ -40,7 +40,7 @@ def populate():
 
 	test_user2 = User()
 	test_user2.username = 'mike-s'
-	test_user2.password = pwhash('password123')
+	test_user2.password = 'password123'
 	test_user2.email = 'test2@weblab1.grad.cse.csusb.edu'
 	test_user2.name = 'Mike'
 	test_user2.roles = auth.ROLE_STUDENT

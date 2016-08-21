@@ -37,7 +37,7 @@ def filter():
 
 @blueprint.route('/')
 def courses():
-	return render_template('courses/main.jinja', courses=session_user().taught)
+	return render_template('courses/instructor.jinja', courses=session_user().taught)
 
 
 @blueprint.route('/course/add', methods=['GET', 'POST'])

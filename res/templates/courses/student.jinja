@@ -1,0 +1,15 @@
+{% if get_flashed_messages() %}
+<div class="alert">{{ get_flashed_messages()[0] }}</div>
+{% endif %}
+
+<h1>Courses</h1>
+
+{% if courses %}
+<ul>
+{% for course in courses %}
+	<li>{{ course.name }} <a href="{{ url_for('main.hello') }}">Download Files</a> <a href="{{ url_for('main.hello') }}">Course Info</a> <a href="{{ url_for('main.hello') }}">Workspace</a></li>
+{% endfor %}
+</ul>
+{% else %}
+No courses found!
+{% endif %}
