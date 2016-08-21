@@ -1,9 +1,17 @@
-from flask import Blueprint, url_for, redirect, flash, render_template
-from .. import auth
+from flask import Blueprint, url_for, redirect, flash, render_template, request
 from ..forms.login import LoginForm
+from ..forms.user import UserPasswordForm
+from ..util import require_login
+from .. import auth, db
 
 
 blueprint = Blueprint('auth', __name__)
+
+
+@blueprint.before_app_request
+def filter():
+	if auth.authenticated() and auth.session_user().temporary_pw and not request.path in ['/logout', '/change_pw']:
+		return redirect(url_for('auth.change_password'))
 
 
 @blueprint.route('/courses')
@@ -50,3 +58,24 @@ def logout():
 		flash('You have been logged out.')
 
 	return redirect(url_for('auth.login'))
+
+
+@blueprint.route('/change_pw', methods=['GET', 'POST'])
+@require_login
+def change_password():
+	form = UserPasswordForm()
+
+	if form.validate_on_submit():
+		user = auth.session_user()
+		user.password = form.new.data
+		user.temporary_pw = False
+
+		db.session.commit()
+
+		auth.logout()
+
+		flash('Password successfully changed. Please relogin.')
+
+		return redirect(url_for('auth.login'))
+
+	return render_template('user/change_pw.jinja', form=form)

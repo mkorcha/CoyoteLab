@@ -19,6 +19,6 @@ class UserPasswordForm(Form):
 	'''
 	old     = PasswordField('Old Password', validators=[DataRequired()])
 	new     = PasswordField('New Password', validators=[DataRequired()])
-	confirm = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new', message='Passwords must match'), Length(min=12)])
+	confirm = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new', message='Passwords must match'), Length(min=8)])
 
 	submit = SubmitField('Submit', validators=[DataRequired()])
