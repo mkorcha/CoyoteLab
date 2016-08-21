@@ -1,4 +1,7 @@
-from flask import Blueprint, redirect, render_template, url_for, flash, abort
+import os
+from io import BytesIO
+from zipfile import ZipFile, ZIP_DEFLATED
+from flask import Blueprint, redirect, render_template, url_for, flash, abort, current_app, send_file
 from ..auth import authenticated, session_user, ROLE_STUDENT
 from ..models import Course, Enrollment
 from .. import db
@@ -62,3 +65,24 @@ def drop_course(course_id):
 	flash('Course dropped')
 
 	return redirect(url_for('student.courses'))
+
+
+@blueprint.route('/course/<course_id>/download')
+def download_files(course_id):
+	course = get_course(course_id)
+	user = session_user()
+	
+	file = BytesIO()
+	zipfile = ZipFile(file, 'w', ZIP_DEFLATED)
+
+	path = current_app.config.get('USER_COURSE_FILE_DIR').format(user_id=user.id, course_id=course_id)
+
+	for root, dirs, files in os.walk(path):
+		for obj in dirs + files:
+			file_path = os.path.join(root, obj)
+			zipfile.write(file_path, file_path.replace(path, ''))
+
+	zipfile.close()
+	file.seek(0)
+
+	return send_file(file, attachment_filename=(course.name + '-' + user.name).replace(' ', '') + '.zip', as_attachment=True, mimetype='application/x-zip-compressed')

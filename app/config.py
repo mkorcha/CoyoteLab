@@ -25,6 +25,10 @@ class DefaultConfig:
 	MAIL_USE_SSL = False
 	MAIL_USERNAME = ''
 	MAIL_PASSWORD = ''
+
+	# The following are templates, each taking {user_id} as a user ID and
+	# {course_id} as a course ID, used for user data
+	USER_COURSE_FILE_DIR = 'files/{user_id}/{course_id}'
 	
 	
 class DevConfig(DefaultConfig):
