@@ -56,7 +56,10 @@ class User(db.Model):
 		'''
 		Adds a role to a user
 		'''
-		self.roles |= role
+		if self.roles:
+			self.roles |= role
+		else:
+			self.roles = role
 
 	def active_in(self, course):
 		return Enrollment.query.filter_by(user=self, course=course, enabled=True).first() != None

@@ -4,6 +4,7 @@ from ..auth import authenticated, session_user, ROLE_INSTRUCTOR, ROLE_STUDENT
 from ..models import User, Course, Enrollment
 from ..forms.course import CourseForm
 from ..forms.user import UserForm
+from ..forms.students import StudentFileForm
 from ..util import rand_str
 from .. import db, mail
 
@@ -100,10 +101,7 @@ def add_student(course_id):
 
 			message = Email(subject="New Account", recipients=[user.email], body="You now have an account. Your username is:\n\n{username}\n\nYour temporary password is:\n\n{password}".format(username=user.username, password=password))
 
-			del password
-
 			db.session.add(user)
-			db.session.commit()
 
 			mail.send(message)
 
@@ -120,9 +118,51 @@ def add_student(course_id):
 	return render_template('courses/students/add.jinja', course=course, form=form)
 
 
-@blueprint.route('/course/<course_id>/students/add_many')
+@blueprint.route('/course/<course_id>/students/add_many', methods=['GET', 'POST'])
 def add_many_students(course_id):
-	pass	
+	form = StudentFileForm()
+	course = get_course(course_id)
+
+	if form.validate_on_submit():
+		file = form.file.data.stream.readlines()
+
+		messages = []
+
+		for entry in file:
+			entry = entry.strip().split(',')
+			username = entry[0]
+			email = entry[1]
+
+			user = User.query.filter_by(email=email).first()
+
+			if user == None:
+				user = User()
+				password = rand_str(12)
+
+				user.username = username
+				user.email = email
+				user.password = password
+				user.name = username
+
+				messages.append(Email(subject="New Account", recipients=[user.email], body="You now have an account. Your username is:\n\n{username}\n\nYour temporary password is:\n\n{password}".format(username=user.username, password=password)))
+
+				db.session.add(user)
+
+			if not course in user.enrolled:
+				user.add_role(ROLE_STUDENT)
+				course.students.append(user)
+
+		db.session.commit()
+
+		with mail.connect() as conn:
+			for message in messages:
+				conn.send(message)
+
+		flash('Operation completed. ' + str(len(file)) + ' users added')
+
+		return redirect(url_for('instructor.students', course_id=course_id))
+
+	return render_template('courses/students/add_many.jinja', course=course, form=form)
 
 
 @blueprint.route('/course/<course_id>/students/activate/<user_id>')

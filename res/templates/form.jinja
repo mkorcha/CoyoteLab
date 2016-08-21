@@ -11,7 +11,7 @@
 {% endmacro %}
 
 
-<form method="post">
+<form method="post"{% if form.file %} enctype="multipart/form-data"{% endif %}>
 	{{ form.csrf_token }}
 
 	{% for field in form %}
