@@ -1,0 +1,14 @@
+<h1>{{ course.name }}</h1>
+<h2>{{ course.instructor.name }}</h2>
+
+<pre>{{ course.description }}</pre>
+
+Duration: {{ course.start_date }} to {{ course.end_date }}<br><br>
+
+{% if course.webpage %}
+<a href="{{ course.webpage }}">Course Webpage</a><br>
+{% endif %}
+<a href="mailto:{{ course.instructor.email }}">Contact Instructor</a><br>
+<br>
+<br>
+<a href="{{ url_for('student.drop_course', course_id=course.id) }}">Drop Course</a>
