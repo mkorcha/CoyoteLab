@@ -1,8 +1,11 @@
 from flask import Blueprint, session, redirect, render_template, url_for, flash, abort
-from ..auth import authenticated, session_user, ROLE_INSTRUCTOR
-from ..models import Course, Enrollment
+from flask_mail import Message as Email
+from ..auth import authenticated, session_user, ROLE_INSTRUCTOR, ROLE_STUDENT
+from ..models import User, Course, Enrollment
 from ..forms.course import CourseForm
-from .. import db
+from ..forms.user import UserForm
+from ..util import rand_str
+from .. import db, mail
 
 
 blueprint = Blueprint('instructor', __name__, url_prefix='/instructor')
@@ -75,12 +78,46 @@ def edit_course(course_id):
 @blueprint.route('/course/<course_id>/students')
 def students(course_id):
 	course = get_course(course_id)
-	return render_template('courses/students.jinja', course=course)
+	return render_template('courses/students/list.jinja', course=course)
 
 
-@blueprint.route('/course/<course_id>/students/add')
+@blueprint.route('/course/<course_id>/students/add', methods=['GET', 'POST'])
 def add_student(course_id):
-	pass
+	form = UserForm()
+	course = get_course(course_id)
+
+	if form.validate_on_submit():
+		user = User.query.filter_by(email=form.email.data).first()
+
+		if user == None:
+			user = User()
+
+			form.populate_obj(user)
+			# username generation will be changed at some point
+			user.username = form.email.data
+			password = rand_str(12)
+			user.password = password
+
+			message = Email(subject="New Account", recipients=[user.email], body="You now have an account. Your username is:\n\n{username}\n\nYour temporary password is:\n\n{password}".format(username=user.username, password=password))
+
+			del password
+
+			db.session.add(user)
+			db.session.commit()
+
+			mail.send(message)
+
+		if not course in user.enrolled:
+			user.add_role(ROLE_STUDENT)
+			course.students.append(user)
+
+		db.session.commit()
+
+		flash('User added')
+
+		return redirect(url_for('instructor.students', course_id=course_id))
+
+	return render_template('courses/students/add.jinja', course=course, form=form)
 
 
 @blueprint.route('/course/<course_id>/students/add_many')

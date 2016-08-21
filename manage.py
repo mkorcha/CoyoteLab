@@ -31,7 +31,7 @@ def populate():
 	'Create sample data for development purposes'
 	test_user = User()
 	test_user.username = 'mike-i'
-	test_user.password = pwhash('password123')
+	test_user.password = 'password123'
 	test_user.email = 'test@weblab1.grad.cse.csusb.edu'
 	test_user.name = 'Mike'
 	test_user.roles = auth.ROLE_INSTRUCTOR

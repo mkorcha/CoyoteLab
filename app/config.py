@@ -1,13 +1,13 @@
-import datetime, random, string, redis
+import datetime, redis
 from simplekv.memory.redisstore import RedisStore
+from .util import rand_str
 
 class DefaultConfig:
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 	# Session configuration
 	PERMANENT_SESSION_LIFETIME = datetime.timedelta(days=365)
-	SECRET_KEY = ''.join(
-			random.SystemRandom().choice(string.printable) for _ in range(32))
+	SECRET_KEY = rand_str(32)
 	SESSION_COOKIE_NAME = 'acm-csusb'
 	SESSION_KEY_BITS = 256
 	SESSION_STORE = RedisStore(redis.StrictRedis())
@@ -16,6 +16,15 @@ class DefaultConfig:
 
 	# Set higher or lower depending on need
 	BCRYPT_WORK_FACTOR = 12
+
+	# Mail config
+	MAIL_DEFAULT_SENDER = 'mikekorcha@gmail.com'
+	MAIL_SERVER = 'smtp.gmail.com'
+	MAIL_PORT = 587
+	MAIL_USE_TLS = True
+	MAIL_USE_SSL = False
+	MAIL_USERNAME = ''
+	MAIL_PASSWORD = ''
 	
 	
 class DevConfig(DefaultConfig):
