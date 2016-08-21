@@ -1,6 +1,6 @@
 from flask import Blueprint, session, redirect, render_template, url_for, flash, abort
 from ..auth import authenticated, session_user, ROLE_INSTRUCTOR
-from ..models import Course
+from ..models import Course, Enrollment
 from ..forms.course import CourseForm
 from .. import db
 
@@ -88,3 +88,19 @@ def add_many_students(course_id):
 	pass	
 
 
+@blueprint.route('/course/<course_id>/students/activate/<user_id>')
+def toggle_enrollment(course_id, user_id):
+	enrollment = Enrollment.query.filter_by(course_id=course_id, user_id=user_id).first()
+
+	# make sure the user is part of the course and that the instructor is in 
+	# fact the owner of the course
+	if enrollment == None or enrollment.course.instructor != session_user():
+		abort(404)
+
+	enrollment.enabled = not enrollment.enabled
+
+	db.session.commit()
+
+	flash(enrollment.user.name + ' updated')
+
+	return redirect(url_for('instructor.students', course_id=course_id))

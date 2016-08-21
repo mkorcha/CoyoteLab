@@ -23,6 +23,9 @@ class User(db.Model):
 		'''
 		return bool(self.roles & role)
 
+	def active_in(self, course):
+		return Enrollment.query.filter_by(user=self, course=course, enabled=True).first() != None
+
 
 class Course(db.Model):
 	'''
