@@ -75,7 +75,7 @@ def download_files(course_id):
 	file = BytesIO()
 	zipfile = ZipFile(file, 'w', ZIP_DEFLATED)
 
-	path = current_app.config.get('USER_COURSE_FILE_DIR').format(user_id=user.id, course_id=course_id)
+	path = current_app.config['USER_COURSE_FILE_DIR'].format(user_id=user.id, course_id=course_id)
 
 	for root, dirs, files in os.walk(path):
 		for obj in dirs + files:

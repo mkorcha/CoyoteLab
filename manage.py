@@ -59,5 +59,10 @@ def populate():
 	print("Sample data generated")
 
 
+@manager.command
+def test_container():
+	from app.containers import _get_client
+	print _get_client()
+
 if __name__ == '__main__':
 	manager.run()

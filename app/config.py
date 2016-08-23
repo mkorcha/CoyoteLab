@@ -26,11 +26,17 @@ class DefaultConfig:
 	MAIL_USERNAME = ''
 	MAIL_PASSWORD = ''
 
-	# The following are templates, each taking {user_id} as a user ID and
-	# {course_id} as a course ID, used for user data
+	# LXD config
+	LXD_ADDRESS = 'https://localhost:8443'
+	LXD_TRUST_PASSWORD = 'lxd_password'
+
+	# The following are templates, with the following parameters:
+	# {user_id} - a user's ID
+	# {course_id} - a course ID
 	USER_COURSE_FILE_DIR = 'files/{user_id}/{course_id}'
+	USER_CONTAINER_NAME = '{course_id}_{user_id}'
 	
-	
+
 class DevConfig(DefaultConfig):
 	DEBUG = True
 	TESTING = True
