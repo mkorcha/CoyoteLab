@@ -108,6 +108,7 @@ class Machine(db.Model):
 	id              = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	name            = db.Column(db.String(255), nullable=False)
 	user_id         = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+	# set to 0 if the machine is a base image
 	base_machine_id = db.Column(db.Integer, db.ForeignKey('machine.id'))
 	last_active     = db.Column(db.DateTime())
 

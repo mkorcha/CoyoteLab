@@ -30,5 +30,7 @@ Vagrant.configure(2) do |config|
     sudo psql << "create database db;"
     sudo psql << "create user dbuser with password 'dbuser';"
     sudo psql << "grant ALL on DATABASE db to dbuser;"
+    openssl req -newkey rsa:2048 -nodes -keyout /home/vagrant/src/lxd.key -out /home/vagrant/src/lxd.csr
+    openssl x509 -signkey lxd.key -in /home/vagrant/src/lxd.csr -req -days 365 -out /home/vagrant/src/lxd.crt
   SHELL
 end

@@ -1,9 +1,10 @@
-import datetime
+import datetime, time
 from flask_script import Manager, Shell, prompt_bool
 from flask_migrate import MigrateCommand
 from app import config, db, get_app, models, auth
-from app.models import User, Course
+from app.models import User, Course, Machine
 from app.auth import pwhash
+from app.containers import _get_client
 
 
 app = get_app(config.DevConfig)
@@ -60,9 +61,56 @@ def populate():
 
 
 @manager.command
-def test_container():
-	from app.containers import _get_client
-	print _get_client()
+def lxd_setup():
+	'Create base images'
+	lxd = _get_client()
+
+	base = lxd.containers.create({
+			'name': 'ubuntu-1604',
+			'source': {
+				'type': 'image',
+				'protocol': 'simplestreams',
+				'server': 'https://images.linuxcontainers.org',
+				'alias': 'ubuntu/xenial/amd64'
+			}}, wait=True)
+		
+	base.start(wait=True)
+
+	# wait for network to come online
+	while len(base.state().network['eth0']['addresses']) < 2:
+		time.sleep(1)
+
+	commands = [['apt-get', 'install', 'openssh-server', 'sudo', '-y'],
+				['useradd', '-m', '-p', 'cs.ePmqxX543E', '-s', '/bin/bash', '-G', 'sudo', 'coyote'],
+				['sed', '-i', '$ a\ALL ALL=(ALL) NOPASSWD: ALL', '/etc/sudoers']]
+
+	for command in commands:
+		stdout, stderr = base.execute(command)
+		print stdout
+		print stderr
+
+	base.snapshots.create('base')
+	base.stop()
+
+	print('Base container {name} created and configured'.format(name=base.name))
+	
+	'''
+	How a new container might work...
+	new = lxd.containers.create({
+		'name': 'mikes-super-cool-container',
+		'source': {
+			'type': 'copy',
+			'source': 'ubuntu-1604'
+		},
+		'config': {
+			'limits.cpu': '1',
+			'limits.memory': '64MB'
+		}}, wait=True)
+
+	new.start()
+	new.stop()
+	'''
+	
 
 if __name__ == '__main__':
 	manager.run()
