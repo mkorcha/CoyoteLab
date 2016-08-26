@@ -20,6 +20,7 @@ class User(db.Model):
 
 	taught   = db.relationship('Course', backref='instructor', lazy='joined')
 	enrolled = association_proxy('enrollment_assoc', 'course')
+	machines = db.relationship('Machine', backref='owner', lazy='dynamic')
 
 
 	@hybrid_property
@@ -98,3 +99,16 @@ class Enrollment(db.Model):
 		self.user    = user
 		self.course  = course
 		self.enabled = enabled
+
+
+class Machine(db.Model):
+	'''
+	Model representing a users machine
+	'''
+	id              = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	name            = db.Column(db.String(255), nullable=False)
+	user_id         = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+	base_machine_id = db.Column(db.Integer, db.ForeignKey('machine.id'))
+	last_active     = db.Column(db.DateTime())
+
+	inherited = db.relationship('Course', backref='base_machine', lazy='dynamic')
