@@ -135,6 +135,7 @@ class Machine(db.Model):
 
 		from util import lxd_client
 		lxd = lxd_client()
+		
 		name = current_app.config['USER_CONTAINER_NAME'].format(course_id=course.id, user_id=user.id)
 
 		print name
