@@ -1,5 +1,9 @@
+from datetime import datetime
+from flask import current_app
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.associationproxy import association_proxy
+from containers import _get_client
+from pylxd.exceptions import LXDAPIException
 from . import db
 
 
@@ -79,7 +83,8 @@ class Course(db.Model):
 	end_date        = db.Column(db.DateTime(), nullable=False)
 	base_machine_id = db.Column(db.Integer, db.ForeignKey('machine.id'), nullable=False)
 
-	students = association_proxy('enrollment_assoc', 'user')
+	students     = association_proxy('enrollment_assoc', 'user')
+	base_machine = db.relationship('Machine', backref=db.backref('course', uselist=False))
 	
 
 class Enrollment(db.Model):
@@ -107,10 +112,55 @@ class Machine(db.Model):
 	Model representing a users machine
 	'''
 	id              = db.Column(db.Integer, primary_key=True, autoincrement=True)
-	name            = db.Column(db.String(255), nullable=False)
+	name            = db.Column(db.String(255), unique=True, nullable=False)
 	user_id         = db.Column(db.Integer, db.ForeignKey('user.id'))
 	base_machine_id = db.Column(db.Integer, db.ForeignKey('machine.id'))
 	last_active     = db.Column(db.DateTime())
 
-	base_machine = db.relationship('Machine', backref='inherited', remote_side='Machine.id')
-	course       = db.relationship('Course', backref='base_machine', lazy='joined')
+	base_machine = db.relationship('Machine', backref='inherited', remote_side='Machine.id', lazy='joined')
+
+
+	@staticmethod
+	def create(user, course):
+		'''
+		Creates a new container for the given user/course combination and 
+		returns a tuple of the form (lxd_container, model)
+		'''
+		if not user.active_in(course):
+			# TODO: raise an exception
+			return None
+
+		lxd = _get_client()
+		name = current_app.config['USER_CONTAINER_NAME'].format(course_id=course.id, user_id=user.id)
+
+		print name
+
+		try:
+			container = lxd.containers.get(name)
+			return (container, Machine.query.filter_by(name=name).first())
+		except LXDAPIException:
+			pass
+
+		container = lxd.containers.create({
+			'name': name,
+			'source': {
+				'type': 'copy',
+				'source': course.base_machine.name
+			},
+			'config': {
+				'limits.cpu': current_app.config['LXD_LIMIT_CPU'],
+				'limits.memory': current_app.config['LXD_LIMIT_MEMORY']
+			}}, wait=True)
+
+		container.snapshots.create('original')
+
+		machine = Machine()
+		machine.name = name
+		machine.base_machine = course.base_machine
+		machine.owner = user
+		machine.last_active = datetime.now()
+
+		db.session.add(machine)
+		db.session.commit()
+
+		return (container, machine)

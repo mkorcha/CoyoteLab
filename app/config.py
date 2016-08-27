@@ -29,12 +29,14 @@ class DefaultConfig:
 	# LXD config
 	LXD_ADDRESS = 'https://localhost:8443'
 	LXD_TRUST_PASSWORD = 'lxd_password'
+	LXD_LIMIT_MEMORY = '64MB'
+	LXD_LIMIT_CPU = '1'
 
 	# The following are templates, with the following parameters:
 	# {user_id} - a user's ID
 	# {course_id} - a course ID
 	USER_COURSE_FILE_DIR = 'files/{user_id}/{course_id}'
-	USER_CONTAINER_NAME = '{course_id}_{user_id}'
+	USER_CONTAINER_NAME = 'user-{course_id}-{user_id}'
 	
 
 class DevConfig(DefaultConfig):

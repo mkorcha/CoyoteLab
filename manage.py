@@ -30,6 +30,11 @@ def reset():
 @MigrateCommand.command
 def populate():
 	'Create sample data for development purposes'
+	if not Machine.query.all():
+		lxd_setup()
+
+	machine = Machine.query.filter_by(name='ubuntu-1604').first()
+
 	test_user = User()
 	test_user.username = 'mike-i'
 	test_user.password = 'password123'
@@ -54,9 +59,11 @@ def populate():
 	test_course.start_date = datetime.datetime.today()
 	test_course.end_date = datetime.datetime.today() + datetime.timedelta(days=5)
 	test_course.students.append(test_user2)
-
+	test_course.base_machine = machine
 	db.session.add(test_course)
 	db.session.commit()
+
+	Machine.create(test_user, test_course)
 
 	print("Sample data generated")
 
@@ -102,23 +109,6 @@ def lxd_setup():
 	db.session.commit()
 
 	print('Base container {name} created and configured'.format(name=base.name))
-	
-	'''
-	How a new container might work...
-	new = lxd.containers.create({
-		'name': 'mikes-super-cool-container',
-		'source': {
-			'type': 'copy',
-			'source': 'ubuntu-1604'
-		},
-		'config': {
-			'limits.cpu': '1',
-			'limits.memory': '64MB'
-		}}, wait=True)
-
-	new.start()
-	new.stop()
-	'''
 	
 
 if __name__ == '__main__':
