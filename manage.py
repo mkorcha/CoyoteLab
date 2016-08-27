@@ -4,7 +4,7 @@ from flask_migrate import MigrateCommand
 from app import config, db, get_app, models, auth
 from app.models import User, Course, Machine
 from app.auth import pwhash
-from app.containers import _get_client
+from app.util import lxd_client
 
 
 app = get_app(config.DevConfig)
@@ -71,7 +71,7 @@ def populate():
 @manager.command
 def lxd_setup():
 	'Create base images'
-	lxd = _get_client()
+	lxd = lxd_client()
 
 	base = lxd.containers.create({
 			'name': 'ubuntu-1604',

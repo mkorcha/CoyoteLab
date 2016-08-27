@@ -1,6 +1,6 @@
 import datetime, redis
 from simplekv.memory.redisstore import RedisStore
-from .util import rand_str
+from util import rand_str
 
 class DefaultConfig:
 	SQLALCHEMY_TRACK_MODIFICATIONS = False

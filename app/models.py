@@ -2,7 +2,6 @@ from datetime import datetime
 from flask import current_app
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.associationproxy import association_proxy
-from containers import _get_client
 from pylxd.exceptions import LXDAPIException
 from . import db
 
@@ -134,7 +133,8 @@ class Machine(db.Model):
 			# TODO: raise an exception
 			return None
 
-		lxd = _get_client()
+		from util import lxd_client
+		lxd = lxd_client()
 		name = current_app.config['USER_CONTAINER_NAME'].format(course_id=course.id, user_id=user.id)
 
 		print name
