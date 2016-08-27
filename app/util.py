@@ -4,6 +4,9 @@ from flask import redirect, url_for
 from auth import authenticated
 
 def rand_str(length):
+	'''
+	Returns a random string of given length
+	'''
 	return ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(length))
 
 def require_login(route_func):

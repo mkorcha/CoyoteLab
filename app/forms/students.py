@@ -5,6 +5,9 @@ from wtforms.validators import DataRequired
 
 
 class StudentFileForm(Form):
+	'''
+	Form used to create many students from a CSV file
+	'''
 	file = FileField('File', validators=[FileRequired(), FileAllowed(['csv'], 'Only CSV files are permitted')])
 
 	submit = SubmitField('Submit', validators=[DataRequired()])

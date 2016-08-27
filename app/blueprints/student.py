@@ -37,6 +37,9 @@ def filter():
 
 @blueprint.route('/')
 def courses():
+	'''
+	View that handles showing a student their enrolled courses
+	'''
 	# a reference to the user needs to be kept around, otherwise the 
 	# association proxy for the enrollment table goes stale
 	user = session_user()
@@ -45,12 +48,19 @@ def courses():
 
 @blueprint.route('/course/<course_id>')
 def course_info(course_id):
+	'''
+	Shows the course info of the given course
+	'''
 	course = get_course(course_id)
 	return render_template('courses/info.jinja', course=course)
 
 
 @blueprint.route('/course/<course_id>/drop')
 def drop_course(course_id):
+	'''
+	Allows a student to drop from a course. The instructor will have to add 
+	them back if they return
+	'''
 	course = get_course(course_id)
 
 	enrollment = Enrollment.query.filter_by(course=course, user=session_user()).first()
@@ -69,6 +79,10 @@ def drop_course(course_id):
 
 @blueprint.route('/course/<course_id>/download')
 def download_files(course_id):
+	'''
+	Creates a zip file of the user's files for a given course and returns it to
+	the browser so it can be downloaded
+	'''
 	course = get_course(course_id)
 	user = session_user()
 	

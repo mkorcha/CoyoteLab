@@ -37,15 +37,22 @@ def filter():
 
 @blueprint.route('/')
 def courses():
+	'''
+	Handles displaying an instructors courses
+	'''
 	return render_template('courses/instructor.jinja', courses=session_user().taught)
 
 
 @blueprint.route('/course/add', methods=['GET', 'POST'])
 def add_course():
+	'''
+	View for an instructor to create a new course
+	'''
 	form = CourseForm()
 
 	if form.validate_on_submit():
 		new_course = Course()
+		# autopopulation is an amazing thing
 		form.populate_obj(new_course)
 		new_course.instructor = session_user()
 		
@@ -61,6 +68,9 @@ def add_course():
 
 @blueprint.route('/course/<course_id>/edit', methods=['GET', 'POST'])
 def edit_course(course_id):
+	'''
+	View for an instructor to edit the given course
+	''' 
 	course = get_course(course_id)
 	form = CourseForm(obj=course)
 
@@ -78,12 +88,19 @@ def edit_course(course_id):
 
 @blueprint.route('/course/<course_id>/students')
 def students(course_id):
+	'''
+	View for an instructor to manage the students of a given course
+	'''
 	course = get_course(course_id)
 	return render_template('courses/students/list.jinja', course=course)
 
 
 @blueprint.route('/course/<course_id>/students/add', methods=['GET', 'POST'])
 def add_student(course_id):
+	'''
+	View for an instructor to add a student to a given course. If the student
+	already exists, they will just be added to the course
+	'''
 	form = UserForm()
 	course = get_course(course_id)
 
@@ -91,6 +108,8 @@ def add_student(course_id):
 		user = User.query.filter_by(email=form.email.data).first()
 
 		if user == None:
+			# TODO: this may need to be more generalized, as the next view also
+			# uses something similar
 			user = User()
 
 			form.populate_obj(user)
@@ -120,6 +139,10 @@ def add_student(course_id):
 
 @blueprint.route('/course/<course_id>/students/add_many', methods=['GET', 'POST'])
 def add_many_students(course_id):
+	'''
+	View for an instructor to add many users to a given course at once. If any
+	student is already a user, they will just be added to the course
+	'''
 	form = StudentFileForm()
 	course = get_course(course_id)
 
@@ -167,6 +190,9 @@ def add_many_students(course_id):
 
 @blueprint.route('/course/<course_id>/students/activate/<user_id>')
 def toggle_enrollment(course_id, user_id):
+	'''
+	Handles adding/dropping a given user from a given course
+	'''
 	enrollment = Enrollment.query.filter_by(course_id=course_id, user_id=user_id).first()
 
 	# make sure the user is part of the course and that the instructor is in 

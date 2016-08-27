@@ -10,6 +10,10 @@ blueprint = Blueprint('auth', __name__)
 
 @blueprint.before_app_request
 def filter():
+	'''
+	Verifies that the user is authenticated and does not need to change a
+	temporary password. This is an application-wide filter
+	'''
 	if auth.authenticated() and auth.session_user().temporary_pw and not request.path in ['/logout', '/change_pw']:
 		return redirect(url_for('auth.change_password'))
 
@@ -58,6 +62,9 @@ def logout():
 @blueprint.route('/change_pw', methods=['GET', 'POST'])
 @require_login
 def change_password():
+	'''
+	Handles a user's password change
+	'''
 	form = UserPasswordForm()
 
 	if form.validate_on_submit():
