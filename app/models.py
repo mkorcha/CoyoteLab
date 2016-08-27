@@ -70,13 +70,14 @@ class Course(db.Model):
 	'''
 	Model representing a course
 	'''
-	id            = db.Column(db.Integer, primary_key=True, autoincrement=True)
-	name          = db.Column(db.String(255), nullable=False)
-	webpage       = db.Column(db.String(255))
-	description   = db.Column(db.Text())
-	instructor_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-	start_date    = db.Column(db.DateTime(), nullable=False)
-	end_date      = db.Column(db.DateTime(), nullable=False)
+	id              = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	name            = db.Column(db.String(255), nullable=False)
+	webpage         = db.Column(db.String(255))
+	description     = db.Column(db.Text())
+	instructor_id   = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+	start_date      = db.Column(db.DateTime(), nullable=False)
+	end_date        = db.Column(db.DateTime(), nullable=False)
+	base_machine_id = db.Column(db.Integer, db.ForeignKey('machine.id'), nullable=False)
 
 	students = association_proxy('enrollment_assoc', 'user')
 	
@@ -107,9 +108,9 @@ class Machine(db.Model):
 	'''
 	id              = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	name            = db.Column(db.String(255), nullable=False)
-	user_id         = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-	# set to 0 if the machine is a base image
+	user_id         = db.Column(db.Integer, db.ForeignKey('user.id'))
 	base_machine_id = db.Column(db.Integer, db.ForeignKey('machine.id'))
 	last_active     = db.Column(db.DateTime())
 
-	inherited = db.relationship('Course', backref='base_machine', lazy='dynamic')
+	base_machine = db.relationship('Machine', backref='inherited', remote_side='Machine.id')
+	course       = db.relationship('Course', backref='base_machine', lazy='joined')

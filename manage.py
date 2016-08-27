@@ -54,6 +54,7 @@ def populate():
 	test_course.start_date = datetime.datetime.today()
 	test_course.end_date = datetime.datetime.today() + datetime.timedelta(days=5)
 	test_course.students.append(test_user2)
+
 	db.session.add(test_course)
 	db.session.commit()
 
@@ -91,6 +92,14 @@ def lxd_setup():
 
 	base.snapshots.create('base')
 	base.stop()
+
+	machine = Machine()
+	machine.name = base.name
+	machine.base_machine = None
+	machine.owner = None
+
+	db.session.add(machine)
+	db.session.commit()
 
 	print('Base container {name} created and configured'.format(name=base.name))
 	
