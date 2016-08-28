@@ -36,7 +36,7 @@ class DefaultConfig:
 	# {user_id} - a user's ID
 	# {course_id} - a course ID
 	USER_COURSE_FILE_DIR = 'files/{user_id}/{course_id}'
-	USER_CONTAINER_NAME = 'user-{course_id}-{user_id}'
+	USER_CONTAINER_NAME = 'user-c{course_id}-u{user_id}'
 	
 
 class DevConfig(DefaultConfig):

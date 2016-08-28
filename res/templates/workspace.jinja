@@ -1,0 +1,47 @@
+<head>
+    <link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet" />
+</head>
+
+<body>
+    <h1>{{ course.name }}</h1>
+
+    <div class="container">
+        <div id="term">
+        </div>
+     </div>
+
+    <script type="application/javascript" src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
+    <script type="application/javascript" src="{{url_for('static', filename='js/term.js')}}"></script>
+    <script type="application/javascript" src="{{url_for('static', filename='js/wssh.js')}}"></script>
+    <script type="application/javascript">
+        function openTerminal(options) {
+            var client = new WSSHClient();
+            var term = new Terminal(80, 24, function(key) {
+                client.send(key);
+            });
+            term.open();
+            $('.terminal').detach().appendTo('#term');
+            term.resize(80, 24);
+            term.write('Connecting...');
+            client.connect(
+                'ws://localhost:8080/workspace/{{ course.id }}/connect', {
+                    onError: function(error) {
+                        term.write('Error: ' + error + '\r\n');
+                    },
+                    onConnect: function() {
+                        // Erase our connecting message
+                        term.write('\r');
+                    },
+                    onClose: function() {
+                        term.write('Connection Reset By Peer');
+                    },
+                    onData: function(data) {
+                        term.write(data);
+                    }
+                }
+            );
+        }
+
+        openTerminal();
+    </script>
+</body>

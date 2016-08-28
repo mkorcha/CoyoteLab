@@ -124,12 +124,12 @@ class Machine(db.Model):
 
 
 	@staticmethod
-	def create(user, course):
+	def get_or_create(user, course):
 		'''
 		Creates a new container for the given user/course combination and 
 		returns a tuple of the form (lxd_container, model)
 		'''
-		if not user.active_in(course):
+		if not user.active_in(course) and course.instructor != user:
 			# TODO: raise an exception
 			return None
 
@@ -137,8 +137,6 @@ class Machine(db.Model):
 		lxd = lxd_client()
 		
 		name = current_app.config['USER_CONTAINER_NAME'].format(course_id=course.id, user_id=user.id)
-
-		print name
 
 		try:
 			container = lxd.containers.get(name)

@@ -7,7 +7,7 @@
 {% if courses %}
 <ul>
 {% for course in courses %}
-	<li>{{ course.name }} (instructor: {{ course.instructor.name }}) <a href="{{ url_for('student.download_files', course_id=course.id) }}" target="_blank">Download Files</a> <a href="{{ url_for('student.course_info', course_id=course.id) }}">Course Info</a> <a href="{{ url_for('main.hello') }}">Workspace</a></li>
+	<li>{{ course.name }} (instructor: {{ course.instructor.name }}) <a href="{{ url_for('student.download_files', course_id=course.id) }}" target="_blank">Download Files</a> <a href="{{ url_for('student.course_info', course_id=course.id) }}">Course Info</a> <a href="{{ url_for('workspace.workspace', course_id=course.id) }}">Workspace</a></li>
 {% endfor %}
 </ul>
 {% else %}
