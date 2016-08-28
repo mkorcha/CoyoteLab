@@ -21,7 +21,7 @@ def get_course(course_id):
 	course = Course.query.get(course_id)
 	user = session_user()
 
-	if course.instructor != user and not user.active_in(course):
+	if course == None or (course.instructor != user and not user.active_in(course)):
 		abort(404)
 
 	return course
@@ -38,6 +38,9 @@ def filter():
 
 @blueprint.route('/<course_id>')
 def workspace(course_id):
+	'''
+	The main workspace view
+	'''
 	course = get_course(course_id)
 	return render_template('workspace.jinja', course=course)
 
@@ -48,6 +51,8 @@ def connect(course_id):
 	Websocket endpoint to connect to the machine from the web browser. This
 	basically creates it's own bridge between the websocket and sshd running
 	on the container
+
+	Note: reloading the page is essentially rebooting the machine
 	'''
 	course = get_course(course_id)
 	container, model = Machine.get_or_create(session_user(), course)
@@ -99,15 +104,12 @@ def connect(course_id):
 
 @blueprint.route('/<course_id>/reset')
 def reset(course_id):
-	pass
+	'''
+	Recreates the user's machine
+	'''
+	course = get_course(course_id)
 
+	# note: only do delete because the next connect will recreate the machine
+	Machine.delete(session_user(), course)
 
-@blueprint.route('/<course_id>/reboot')
-def reboot(course_id):
-	pass
-
-
-@blueprint.route('/<course_id>/pulse')
-def pulse(course_id):
-	pass
-	
+	return redirect(url_for('workspace.workspace', course_id=course_id))

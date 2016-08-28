@@ -130,19 +130,17 @@ class Machine(db.Model):
 		returns a tuple of the form (lxd_container, model)
 		'''
 		if not user.active_in(course) and course.instructor != user:
-			# TODO: raise an exception
 			return None
 
 		from util import lxd_client
 		lxd = lxd_client()
 		
-		name = current_app.config['USER_CONTAINER_NAME'].format(course_id=course.id, user_id=user.id)
+		pair = Machine.get(user, course)
 
-		try:
-			container = lxd.containers.get(name)
-			return (container, Machine.query.filter_by(name=name).first())
-		except LXDAPIException:
-			pass
+		if pair != None:
+			return pair
+
+		name = current_app.config['USER_CONTAINER_NAME'].format(course_id=course.id, user_id=user.id)
 
 		container = lxd.containers.create({
 			'name': name,
@@ -155,8 +153,6 @@ class Machine(db.Model):
 				'limits.memory': current_app.config['LXD_LIMIT_MEMORY']
 			}}, wait=True)
 
-		container.snapshots.create('original')
-
 		machine = Machine()
 		machine.name = name
 		machine.base_machine = course.base_machine
@@ -167,3 +163,44 @@ class Machine(db.Model):
 		db.session.commit()
 
 		return (container, machine)
+
+	@staticmethod
+	def get(user, course):
+		'''
+		Gets a container/model pair for the given user/course combination. or
+		None if it doesn't exist
+		'''
+		if not user.active_in(course) and course.instructor != user:
+			return None
+
+		from util import lxd_client
+		lxd = lxd_client()
+
+		name = current_app.config['USER_CONTAINER_NAME'].format(course_id=course.id, user_id=user.id)
+
+		try:
+			container = lxd.containers.get(name)
+			return (container, Machine.query.filter_by(name=name).first())
+		except LXDAPIException:
+			return None
+			
+
+	@staticmethod
+	def delete(user, course):
+		'''
+		Deletes a container for the given user/course combination
+		'''
+		if not user.active_in(course) and course.instructor != user:
+			return
+
+		container = Machine.get(user, course)
+
+		if container == None:
+			return
+
+		# remove the container from lxd
+		container[0].delete(wait=True)
+
+		# remove it from the database
+		db.session.delete(container[1])
+		db.session.commit()

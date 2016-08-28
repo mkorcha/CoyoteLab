@@ -63,8 +63,6 @@ def populate():
 	db.session.add(test_course)
 	db.session.commit()
 
-	Machine.get_or_create(test_user, test_course)
-
 	print("Sample data generated")
 
 
@@ -88,8 +86,6 @@ def lxd_setup():
 	while len(base.state().network['eth0']['addresses']) < 2:
 		time.sleep(1)
 
-	print base.state().network['eth0']['addresses']
-
 	commands = [['apt-get', 'install', 'openssh-server', 'sudo', 'man', '-y'],
 				['useradd', '-m', '-p', 'cs.ePmqxX543E', '-s', '/bin/bash', '-G', 'sudo', 'coyote'],
 				['sed', '-i', '$ a\ALL ALL=(ALL) NOPASSWD: ALL', '/etc/sudoers']]
@@ -99,7 +95,6 @@ def lxd_setup():
 		print stdout
 		print stderr
 
-	base.snapshots.create('base')
 	base.stop()
 
 	machine = Machine()
