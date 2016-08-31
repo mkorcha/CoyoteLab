@@ -1,6 +1,9 @@
 import datetime, time
 from flask_script import Manager, Shell, prompt_bool
 from flask_migrate import MigrateCommand
+from gevent.pywsgi import WSGIServer
+from geventwebsocket.handler import WebSocketHandler
+from subprocess import Popen
 from app import config, db, get_app, models, auth
 from app.models import User, Course, Machine
 from app.auth import pwhash
@@ -31,7 +34,43 @@ def reset():
 def populate():
 	'Create sample data for development purposes'
 	if not Machine.query.all():
-		lxd_setup()
+		lxd = lxd_client()
+
+		base = lxd.containers.create({
+				'name': 'ubuntu-1604',
+				'source': {
+					'type': 'image',
+					'protocol': 'simplestreams',
+					'server': 'https://images.linuxcontainers.org',
+					'alias': 'ubuntu/xenial/amd64'
+				}}, wait=True)
+			
+		base.start(wait=True)
+
+		# wait for network to come online
+		while len(base.state().network['eth0']['addresses']) < 2:
+			time.sleep(1)
+
+		commands = [['apt-get', 'install', 'openssh-server', 'sudo', 'man', '-y'],
+					['useradd', '-m', '-p', 'cs.ePmqxX543E', '-s', '/bin/bash', '-G', 'sudo', 'coyote'],
+					['sed', '-i', '$ a\ALL ALL=(ALL) NOPASSWD: ALL', '/etc/sudoers']]
+
+		for command in commands:
+			stdout, stderr = base.execute(command)
+			print stdout
+			print stderr
+
+		base.stop()
+
+		machine = Machine()
+		machine.name = base.name
+		machine.base_machine = None
+		machine.owner = None
+
+		db.session.add(machine)
+		db.session.commit()
+
+		print('Base container {name} created and configured'.format(name=base.name))
 
 	machine = Machine.query.filter_by(name='ubuntu-1604').first()
 
@@ -67,46 +106,17 @@ def populate():
 
 
 @manager.command
-def lxd_setup():
-	'Create base images'
-	lxd = lxd_client()
+def run():
+	'Run built-in development server'
+	Popen('gulp', shell=True)
 
-	base = lxd.containers.create({
-			'name': 'ubuntu-1604',
-			'source': {
-				'type': 'image',
-				'protocol': 'simplestreams',
-				'server': 'https://images.linuxcontainers.org',
-				'alias': 'ubuntu/xenial/amd64'
-			}}, wait=True)
-		
-	base.start(wait=True)
+	server = WSGIServer(('0.0.0.0', 8080), get_app(config.DevConfig), handler_class=WebSocketHandler)
 
-	# wait for network to come online
-	while len(base.state().network['eth0']['addresses']) < 2:
-		time.sleep(1)
+	try:
+		server.serve_forever()
+	except KeyboardInterrupt:
+		pass	
 
-	commands = [['apt-get', 'install', 'openssh-server', 'sudo', 'man', '-y'],
-				['useradd', '-m', '-p', 'cs.ePmqxX543E', '-s', '/bin/bash', '-G', 'sudo', 'coyote'],
-				['sed', '-i', '$ a\ALL ALL=(ALL) NOPASSWD: ALL', '/etc/sudoers']]
-
-	for command in commands:
-		stdout, stderr = base.execute(command)
-		print stdout
-		print stderr
-
-	base.stop()
-
-	machine = Machine()
-	machine.name = base.name
-	machine.base_machine = None
-	machine.owner = None
-
-	db.session.add(machine)
-	db.session.commit()
-
-	print('Base container {name} created and configured'.format(name=base.name))
-	
 
 if __name__ == '__main__':
 	manager.run()
