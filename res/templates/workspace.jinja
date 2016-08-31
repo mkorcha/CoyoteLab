@@ -13,9 +13,7 @@
     <a href="{{ url_for('workspace.workspace', course_id=course.id) }}">Reboot</a>
     <a href="{{ url_for('workspace.reset', course_id=course.id) }}">Reset</a>
 
-    <script type="application/javascript" src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
-    <script type="application/javascript" src="{{url_for('static', filename='js/term.js')}}"></script>
-    <script type="application/javascript" src="{{url_for('static', filename='js/wssh.js')}}"></script>
+    <script type="application/javascript" src="{{url_for('static', filename='js/main.js')}}"></script>
     <script type="application/javascript">
         function openTerminal(options) {
             var client = new WSSHClient();

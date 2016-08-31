@@ -6,3 +6,5 @@ uploads
 *.crt
 *.key
 *.csr
+node_modules
+public

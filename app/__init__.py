@@ -16,7 +16,7 @@ mail = Mail()
 
 def get_app(config):
 	app = Flask(__name__,
-		        static_folder='../res',
+		        static_folder='../public',
 		        template_folder='../res/templates')
 	app.config.from_object(config)
 
