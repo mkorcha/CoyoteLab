@@ -27,7 +27,7 @@
             term.resize(80, 24);
             term.write('Connecting...');
             client.connect(
-                'ws://localhost:8080/workspace/{{ course.id }}/connect', {
+                'ws://localhost:8080/workspace/{{ course.id }}/connect{% if user %}/{{ user.id }}{% endif %}', {
                     onError: function(error) {
                         term.write('Error: ' + error + '\r\n');
                     },

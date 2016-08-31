@@ -7,7 +7,7 @@ from flask import Blueprint, request, redirect, url_for, abort, render_template
 from werkzeug.exceptions import BadRequest
 from wssh import WSSHBridge
 from ..auth import authenticated, session_user
-from ..models import Course, Machine
+from ..models import Course, Machine, User
 from .. import db
 
 blueprint = Blueprint('workspace', __name__, url_prefix='/workspace')
@@ -26,6 +26,16 @@ def get_course(course_id):
 
 	return course
 
+def get_student(course, student_id):
+	'''
+	Returns the student if the instructor can access this student's work
+	'''
+	student = User.query.get(student_id)
+
+	if student == None or course.instructor != session_user() or not student.active_in(course):
+		abort(404)
+
+	return student
 
 @blueprint.before_request
 def filter():
@@ -37,16 +47,20 @@ def filter():
 
 
 @blueprint.route('/<course_id>')
-def workspace(course_id):
+@blueprint.route('/<course_id>/<student_id>')
+def workspace(course_id, student_id=None):
 	'''
 	The main workspace view
 	'''
 	course = get_course(course_id)
-	return render_template('workspace.jinja', course=course)
+	student = get_student(course, student_id) if student_id else None
+
+	return render_template('workspace.jinja', course=course, user=student)
 
 
 @blueprint.route('/<course_id>/connect')
-def connect(course_id):
+@blueprint.route('/<course_id>/connect/<student_id>')
+def connect(course_id, student_id=None):
 	'''
 	Websocket endpoint to connect to the machine from the web browser. This
 	basically creates it's own bridge between the websocket and sshd running
@@ -55,7 +69,8 @@ def connect(course_id):
 	Note: reloading the page is essentially rebooting the machine
 	'''
 	course = get_course(course_id)
-	container, model = Machine.get_or_create(session_user(), course)
+	student = get_student(course, student_id) if student_id else session_user()
+	container, model = Machine.get_or_create(student, course)
 
 	# start the machine if need be and wait for the network to come online, 
 	# then get the address to connect to
@@ -103,7 +118,7 @@ def connect(course_id):
 
 
 @blueprint.route('/<course_id>/reset')
-def reset(course_id):
+def reset(course_id, student_id):
 	'''
 	Recreates the user's machine
 	'''
