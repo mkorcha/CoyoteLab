@@ -1,14 +1,11 @@
 <head>
-    <link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='css/xterm.css')}}" rel="stylesheet" />
 </head>
 
 <body>
     <h1>{{ course.name }}</h1>
 
-    <div class="container">
-        <div id="term">
-        </div>
-    </div>
+    <div id="terminal"></div>
 
     <a href="{{ url_for('workspace.workspace', course_id=course.id) }}">Reboot</a>
     <a href="{{ url_for('workspace.reset', course_id=course.id) }}">Reset</a>
@@ -16,13 +13,16 @@
     <script type="application/javascript" src="{{url_for('static', filename='js/main.js')}}"></script>
     <script type="application/javascript">
         function openTerminal(options) {
-            var client = new WSSHClient();
-            var term = new Terminal(80, 24, function(key) {
+            var client = new WSSHClient(),
+                term   = new Terminal({cursorBlink: true});
+
+            term.open(document.getElementById('terminal'));
+            term.fit()
+
+            term.on('key', function(key) {
                 client.send(key);
             });
-            term.open();
-            $('.terminal').detach().appendTo('#term');
-            term.resize(80, 24);
+
             term.write('Connecting...');
             client.connect(
                 'ws://localhost:8080/workspace/{{ course.id }}/connect{% if user %}/{{ user.id }}{% endif %}', {
@@ -42,7 +42,7 @@
                 }
             );
         }
-
+        
         openTerminal();
     </script>
 </body>

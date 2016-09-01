@@ -7,12 +7,19 @@ var gulp    = require('gulp'),
 
 var paths = {
 	in: {
-		js:   'res/js/**/*.js',
-		sass: 'res/sass/**/*.scss'
+		js: [
+			'node_modules/xterm/src/xterm.js', 
+		    'node_modules/xterm/addons/fit/fit.js',
+		    'res/js/**/*.js'
+		],
+		sass: [
+			'node_modules/xterm/src/xterm.css',
+			'res/sass/**/*.scss'
+		]
 	},
 	out: {
-		js:   'public/js',
-		css:  'public/css'
+		js:  'public/js',
+		css: 'public/css'
 	}
 }
 
@@ -26,7 +33,7 @@ gulp.task('sass', function() {
 gulp.task('js', function() {
 	gulp.src(paths.in.js)
 	    .pipe(concat('main.js'))
-	    .pipe(uglify())
+	    //.pipe(uglify())
 	    .pipe(gulp.dest(paths.out.js));
 });
 

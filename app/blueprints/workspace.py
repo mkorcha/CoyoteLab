@@ -10,6 +10,7 @@ from ..auth import authenticated, session_user
 from ..models import Course, Machine, User
 from .. import db
 
+
 blueprint = Blueprint('workspace', __name__, url_prefix='/workspace')
 
 
