@@ -12,37 +12,10 @@
 
     <script type="application/javascript" src="{{url_for('static', filename='js/main.js')}}"></script>
     <script type="application/javascript">
-        function openTerminal(options) {
-            var client = new WSSHClient(),
-                term   = new Terminal({cursorBlink: true});
-
-            term.open(document.getElementById('terminal'));
-            term.fit()
-
-            term.on('key', function(key) {
-                client.send(key);
-            });
-
-            term.write('Connecting...');
-            client.connect(
-                'ws://localhost:8080/workspace/{{ course.id }}/connect{% if user %}/{{ user.id }}{% endif %}', {
-                    onError: function(error) {
-                        term.write('Error: ' + error + '\r\n');
-                    },
-                    onConnect: function() {
-                        // Erase our connecting message
-                        term.write('\r');
-                    },
-                    onClose: function() {
-                        term.write('Connection Reset By Peer');
-                    },
-                    onData: function(data) {
-                        term.write(data);
-                    }
-                }
-            );
+        document.onreadystatechange = function() {
+            if(document.readyState == 'complete' || document.readyState == 'loaded') {
+                workspace_init(document.getElementById('terminal'), 'ws://localhost:8080/workspace/{{ course.id }}/connect{% if user %}/{{ user.id }}{% endif %}');
+            }
         }
-        
-        openTerminal();
     </script>
 </body>

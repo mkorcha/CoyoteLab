@@ -33,7 +33,7 @@ gulp.task('sass', function() {
 gulp.task('js', function() {
 	gulp.src(paths.in.js)
 	    .pipe(concat('main.js'))
-	    //.pipe(uglify())
+	    .pipe(uglify())
 	    .pipe(gulp.dest(paths.out.js));
 });
 
