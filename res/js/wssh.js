@@ -1,8 +1,8 @@
-/*
-A fairly heavily modified verson of WSSHClient that is part of the wssh Python
-package. The original can be found in site_packages/wssh/static/wssh.js in the
-virtualenv
-*/
+/**
+ * A fairly heavily modified verson of WSSHClient that is part of the wssh 
+ * Python package. The original can be found in 
+ * site_packages/wssh/static/wssh.js in the virtualenv donwload files
+ */
 
 function WSSHClient() {};
 

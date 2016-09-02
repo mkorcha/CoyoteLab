@@ -5,6 +5,8 @@ from util import rand_str
 class DefaultConfig:
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+	PREFERRED_URL_SCHEME = 'https'
+
 	# Session configuration
 	PERMANENT_SESSION_LIFETIME = datetime.timedelta(days=365)
 	SECRET_KEY = rand_str(32)
@@ -42,6 +44,8 @@ class DefaultConfig:
 class DevConfig(DefaultConfig):
 	DEBUG = True
 	TESTING = True
+
+	SERVER_NAME = 'localhost:8080'
 
 	# SQL database configuration
 	SQLALCHEMY_DATABASE_URI = 'postgresql://dbuser:dbuser@localhost/db'
