@@ -1,0 +1,96 @@
+@import 'colors';
+
+body {
+	background-color: #F5F5F5;
+
+	color: $text-primary;
+
+	font-size: 14px;
+	font-family: 'Roboto', sans-serif;
+}
+
+header, footer {
+	font-family: 'Roboto Condensed', sans-serif;
+}
+
+header, .container {
+	box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+.container {
+	width: 960px;
+	margin: -76px auto 0 auto;
+
+	position: relative;
+}
+
+header {
+	margin: 0;
+
+	height: 146px;
+	width: 100%;
+
+	background-color: $primary_main;
+	
+	.container {
+		box-shadow: none;
+		margin: 0 auto;
+	}
+}
+
+h1, h2, h3 {
+	display: inline-block;
+}
+
+h1 {
+	color: $text_light;
+}
+
+h2 {
+	margin: 0;
+	padding: 0;
+}
+
+h3 {
+	font-size: 12px;
+	font-weight: 0;
+
+	color: $text_secondary;
+	text-transform: uppercase;
+}
+
+nav {
+	position: absolute;
+	right: 0; top: 16px;
+
+	color: $text-light;
+
+	a {
+		text-decoration: none;
+
+		color: $text_light;
+
+		&:hover {
+			color: $accent;
+		}
+	}
+}
+
+main, footer {
+	padding: 16px;
+
+	display: block;
+	background-color: #ffffff;
+}
+
+footer {
+	font-size: 12px;
+	text-align: center;
+
+	border-top: 1px solid $divider;
+}
+
+p {
+	margin: 12px auto 0 auto;
+	line-height: 150%;
+}

@@ -1,4 +1,4 @@
-from flask import Blueprint, url_for, redirect, flash, render_template, request
+from flask import Blueprint, url_for, redirect, flash, render_template, request, current_app
 from ..forms.login import LoginForm
 from ..forms.user import UserPasswordForm
 from ..util import require_login
@@ -14,6 +14,13 @@ def filter():
 	Verifies that the user is authenticated and does not need to change a
 	temporary password. This is an application-wide filter
 	'''
+	# add a couple of helpers for the base template so that I don't have to pass
+	# in a bunch of stuff each time
+	# TODO: I feel like there is a better way to do this
+	current_app.jinja_env.globals['authenticated'] = auth.authenticated
+	current_app.jinja_env.globals['is_instructor'] = lambda: auth.session_user().has_role(auth.ROLE_INSTRUCTOR)
+	current_app.jinja_env.globals['is_student']    = lambda: auth.session_user().has_role(auth.ROLE_STUDENT)
+
 	if auth.authenticated() and auth.session_user().temporary_pw and not request.path in ['/logout', '/change_pw']:
 		return redirect(url_for('auth.change_password'))
 

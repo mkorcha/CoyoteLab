@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+	<head>
+		<title>{% if subtitle %}{{ subtitle}} :: {% endif %}CoyoteLab</title>
+
+		<link href="{{url_for('static', filename='css/normalize.css')}}" rel="stylesheet" />
+		<link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet" />
+
+		{% block styles %}{% endblock %}
+	</head>
+
+	<body>
+		<header>
+			<div class="container">
+				<h1>CoyoteLab</h1>
+
+				<nav>
+				{% if authenticated() %}
+					{% if is_instructor() %}<a href="{{ url_for('instructor.courses') }}">Instructor</a> | {% endif %}
+					{% if is_student() %}<a href="{{ url_for('student.courses') }}">Courses</a> | {% endif %}
+					<a href="{{ url_for('auth.change_password') }}">Change Password</a> |
+					<a href="{{ url_for('auth.logout') }}">Logout</a>
+				{% else %}
+					<a href="{{ url_for('auth.login') }}">Login</a>
+				{% endif %}
+				</nav>
+			</div>
+		</header>
+
+		<div class="container">
+			<main>
+			{% block main %}
+				<h2>CSE 201-01</h2>
+				<h3>David Turner, PhD</h3>
+
+				<p>
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ex eros, iaculis sed turpis varius, sodales maximus dolor. Sed a neque in lacus accumsan rutrum non at est. Pellentesque lacinia massa non ipsum varius, ut ultrices diam ornare. Maecenas porttitor ipsum non cursus finibus. Pellentesque arcu ipsum, posuere sit amet luctus eget, ullamcorper tincidunt diam. Proin id neque condimentum, commodo nisl id, ultricies tellus. Aliquam venenatis, sapien sit amet elementum elementum, lacus diam aliquet ex, nec sagittis lectus quam hendrerit nisi. Sed iaculis, ante vitae venenatis tristique, mauris arcu aliquam metus, eu imperdiet ligula dui vitae enim. Integer pretium ut urna ac consequat. 
+				</p>
+				<p>
+					Proin suscipit urna sit amet tortor molestie consectetur. Vivamus placerat, elit ut dictum ornare, sapien ante fermentum libero, vitae tempus turpis ante eget nunc. Integer dictum ornare sapien id porttitor. Aenean eu nunc porta, auctor eros a, placerat est. Duis et magna libero. Ut ut consequat quam. Integer a tortor ac leo egestas pulvinar. 
+				</p>
+			{% endblock %}
+			</main>
+
+			<footer>
+				Master's project by Mike Korcha, 2016<br>
+				California State University, San Bernardino
+			</footer>
+		</div>
+
+		{% block scripts %}{% endblock %}
+	</body>
+</html>

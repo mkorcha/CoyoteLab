@@ -13,6 +13,7 @@ var paths = {
 		    'res/js/**/*.js'
 		],
 		sass: [
+			'node_modules/normalize.css/normalize.css',
 			'node_modules/xterm/src/xterm.css',
 			'res/sass/**/*.scss'
 		]
