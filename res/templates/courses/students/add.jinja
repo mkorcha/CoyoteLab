@@ -1,5 +1,12 @@
-<h1>{{ course.name }}</h1>
+{% extends 'form.jinja' %}
 
-<h2>Add Student</h2>
+{% block main %}
+<h2>{{ course.name }}</h2>
+<h3>Adding Student</h3>
 
-{% include 'form.jinja' %}
+<p>To add a student, fill in the following information. If a user already exists in the system with the specified information, they will be added to your course.</p>
+
+<p>The created user will be sent a temporary password, which they will be required to change in order to access the system.</p>
+
+{{ super()}}
+{% endblock %}

@@ -1,0 +1,95 @@
+table.form {
+	width: 100%;
+
+	margin-bottom: 8px;
+
+	.label-cell {
+		white-space: nowrap;
+	}
+
+	.field-cell {
+		width: 100%;
+		padding-left: 1em;
+	}
+}
+
+textarea,
+input[type=text], input[type=password], input[type=email] {
+	padding: 8px 0;
+	margin: 4px 0;
+
+	border: none;
+	box-shadow: none;
+	resize: none;
+
+	background-color: transparent;
+
+	border-bottom: 2px solid $divider;
+
+	width: 100%;
+
+	&:focus {
+		border-bottom: 2px solid $accent;
+	}
+
+	&:invalid {
+		border-bottom: 2px solid $invalid_light;
+	}
+
+	&:focus:invalid {
+		border-bottom: 2px solid $invalid;
+	}
+
+	&::-moz-placeholder {
+		color: $text_hint;
+		opacity: 1;
+	}
+}
+
+input[type=button], input[type=submit] {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+
+	border-radius: 2px;
+
+	font-size: 14px;
+	font-weight: bold;
+	text-transform: uppercase;
+
+	border: 0;
+	outline: 0;
+
+	height: 36px;
+	min-width: 88px;
+
+	background-color: $accent;
+	color: $text_light;
+
+	padding: 0.65em 1.75em;
+
+	box-shadow: 0px 1px 4px #C4C4c4;
+
+	cursor: pointer;
+
+	&:active {
+		box-shadow: 0px 3px 10px #C4C4c4;
+	}
+}
+
+label {
+	color: $text_secondary;
+}
+
+.button-holder {
+	text-align: right;
+}
+
+.error {
+	margin: 6px 0;
+	
+	font-size: 12px;
+	text-align: right;
+
+	color: $invalid;
+}

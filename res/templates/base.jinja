@@ -29,6 +29,11 @@
 
 		<div class="container">
 			<main>
+			{% if get_flashed_messages() %}
+				{# only a single message is flashed at a time #}
+				<div class="notice">{{ get_flashed_messages()[0] }}</div>
+			{% endif %}
+
 			{% block main %}
 				<h2>CSE 201-01</h2>
 				<h3>David Turner, PhD</h3>

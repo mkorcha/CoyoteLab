@@ -83,7 +83,7 @@ def edit_course(course_id):
 
 		return redirect(url_for('instructor.courses'))
 
-	return render_template('courses/edit.jinja', form=form)
+	return render_template('courses/edit.jinja', form=form, course=course)
 
 
 @blueprint.route('/course/<course_id>/students')

@@ -1,7 +1,7 @@
 @import 'colors';
 
 body {
-	background-color: #F5F5F5;
+	background-color: $background;
 
 	color: $text-primary;
 
@@ -91,6 +91,24 @@ footer {
 }
 
 p {
-	margin: 8px auto 8px auto;
+	margin: 12px auto 12px auto;
 	line-height: 150%;
+}
+
+a {
+	text-decoration: none;
+	color: $accent;
+
+	&:hover, &:active {
+		color: $accent_invert;
+	}
+}
+
+.notice {
+	padding: 8px;
+	margin-bottom: 12px;
+
+	border-radius: 4px;
+
+	background-color: $background;
 }

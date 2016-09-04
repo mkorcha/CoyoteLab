@@ -1,5 +1,16 @@
-{% if get_flashed_messages() %}
-<div class="alert">{{ get_flashed_messages()[0] }}</div>
+{% extends 'form.jinja' %}
+
+{% block main %}
+{% if course %}
+<h2>{{ course.name }}</h2>
+<h3>Editing Details</h3>
+
+<p>Update the information for your course here. If you want to manage this course's students, <a href="{{ url_for('instructor.students', course_id=course.id) }}">please go here instead.</a></p>
+{% else %}
+<h2>Course Creation</h2>
+
+<p>Create a new course by filling in the following form.</p>
 {% endif %}
 
-{% include 'form.jinja' %}
+{{ super() }}
+{% endblock %}

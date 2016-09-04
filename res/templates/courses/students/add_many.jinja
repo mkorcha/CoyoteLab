@@ -1,9 +1,19 @@
-<h1>{{ course.name }}</h1>
+{% extends 'form.jinja' %}
 
-<h2>Add Students from File</h2>
+{% block main %}
+<h2>{{ course.name }}</h2>
+<h3>Importing Students</h3>
 
-File format:<br><br>
-<pre>user_id,email</pre>
-All users will receive a temporary password to log in with<br><br>
+<p>To add multiple students, please generate a CSV file similar to the following (<em>user_name</em> referring to actual name, not a username):</p>
 
-{% include 'form.jinja' %}
+<pre>user_name1,user_email1
+user_name2,user_email2
+user_name3,user_email3
+user_name4,user_email4</pre>
+
+<p>This file can be created in Microsoft Excel, LibreOffice Calc, and Google Sheets, among others, from data output from another source (such as PeopleSoft).</p>
+
+<p>Created users will be sent a temporary password, which they will be required to change in order to access the system.</p>
+
+{{ super() }}
+{% endblock %}
