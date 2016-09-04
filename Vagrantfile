@@ -26,11 +26,9 @@ Vagrant.configure(2) do |config|
     sudo apt-get update
     sudo apt-get install python-virtualenv python-dev libffi-dev libssl-dev -y
     sudo apt-get install lxd -t trusty-backports -y
-    sudo apt-get install postgresql libpq-dev redis-server npm node nodejs-legacy
-    sudo psql << "create database db;"
-    sudo psql << "create user dbuser with password 'dbuser';"
-    sudo psql << "grant ALL on DATABASE db to dbuser;"
-    openssl req -newkey rsa:2048 -nodes -keyout /home/vagrant/src/lxd.key -out /home/vagrant/src/lxd.csr
-    openssl x509 -signkey lxd.key -in /home/vagrant/src/lxd.csr -req -days 365 -out /home/vagrant/src/lxd.crt
+    sudo apt-get install postgresql libpq-dev redis-server npm nodejs-legacy -y
+    sudo -u postgres psql -c "create database db;"
+    sudo -u postgres psql -c "create user dbuser with password 'dbuser';"
+    sudo -u postgres psql -c "grant all on database db to dbuser;"
   SHELL
 end
