@@ -1,26 +1,27 @@
-var gulp    = require('gulp'),
-    sass    = require('gulp-sass'),
-    minicss = require('gulp-clean-css'),
-    uglify  = require('gulp-uglify'),
-    concat  = require('gulp-concat')
+var gulp     = require('gulp'),
+    sass     = require('gulp-sass'),
+    minicss  = require('gulp-clean-css'),
+    uglify   = require('gulp-uglify'),
+    concat   = require('gulp-concat')
 ;
 
 var paths = {
 	in: {
 		js: [
 			'node_modules/xterm/src/xterm.js', 
-		    'node_modules/xterm/addons/fit/fit.js',
 		    'res/js/**/*.js'
 		],
 		sass: [
 			'node_modules/normalize.css/normalize.css',
 			'node_modules/xterm/src/xterm.css',
 			'res/sass/**/*.scss'
-		]
+		],
+		img: 'res/img/**/*'
 	},
 	out: {
 		js:  'public/js',
-		css: 'public/css'
+		css: 'public/css',
+		img: 'public/img'
 	}
 }
 
@@ -38,4 +39,9 @@ gulp.task('js', function() {
 	    .pipe(gulp.dest(paths.out.js));
 });
 
-gulp.task('default', ['sass', 'js'])
+gulp.task('img', function() {
+	gulp.src(paths.in.img)
+		.pipe(gulp.dest(paths.out.img));
+});
+
+gulp.task('default', ['sass', 'js', 'img'])

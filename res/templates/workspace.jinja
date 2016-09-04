@@ -1,21 +1,44 @@
-<head>
-    <link href="{{url_for('static', filename='css/xterm.css')}}" rel="stylesheet" />
-</head>
+{% extends 'base.jinja' %}
 
-<body>
-    <h1>{{ course.name }}</h1>
+{% block styles %}
+<link href="{{ url_for('static', filename='css/xterm.css') }}" rel="stylesheet" />
+<link href="{{ url_for('static', filename='css/workspace.css') }}" rel="stylesheet" />
+{% endblock %}
 
-    <div id="terminal"></div>
+{% block main %}
+<h2>{{ course.name }}</h2>
+<h3>Workspace</h3>
 
-    <a href="{{ url_for('workspace.workspace', course_id=course.id) }}">Reboot</a>
-    <a href="{{ url_for('workspace.reset', course_id=course.id) }}">Reset</a>
+<p>This is your workspace for the course. On the left, you have your terminal connected to a personal Linux machine. On the right, there are some controls that allow you to restart, reconnect, and reset your machine.</p>
 
-    <script type="application/javascript" src="{{url_for('static', filename='js/main.js')}}"></script>
-    <script type="application/javascript">
-        document.onreadystatechange = function() {
-            if(document.readyState == 'complete' || document.readyState == 'loaded') {
-                workspace_init(document.getElementById('terminal'), fix_prefix('{{ url_for("workspace.connect", course_id=course.id, student_id=user.id if user else None, _external=True) }}')); 
-            }
+<div class="workspace">
+	<div id="terminal"></div>
+	<div class="controls">
+		<div class="control-container">
+			<a href="#" id="reconnect">
+				<img src="{{ url_for('static', filename='img/reconnect.png') }}">
+			</a>
+			<a href="{{ url_for('workspace.workspace', course_id=course.id) }}">
+				<img src="{{ url_for('static', filename='img/restart.png') }}">
+			</a>
+			<a href="{{ url_for('workspace.reset', course_id=course.id) }}" id="reset">
+				<img src="{{ url_for('static', filename='img/reset.png') }}">
+			</a>
+		</div>
+	</div>
+</div>
+
+<div class="clear"></div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="application/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script type="application/javascript">
+    document.onreadystatechange = function() {
+        if(document.readyState == 'complete' || document.readyState == 'loaded') {
+            workspace_init(document.getElementById('terminal'), fix_prefix('{{ url_for("workspace.connect", course_id=course.id, student_id=user.id if user else None, _external=True) }}'));
         }
-    </script>
-</body>
+    }
+</script>
+{% endblock %}

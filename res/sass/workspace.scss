@@ -1,0 +1,49 @@
+.workspace {
+	width: 636px;
+	margin: 0 auto;
+
+	display: flex;
+	
+	background: #000000;
+
+	padding-top: 8px;
+
+	border: #000 solid 5px;
+}
+
+.terminal {
+	color: #f0f0f0;
+
+	line-height: 130%;
+	font-family: "Source Code Pro", monospace;
+	font-size: 12px;
+	
+	width: 600px;
+
+	flex: 0 0 600px;
+}
+
+.controls {
+	width: 36px;
+
+	flex: 1;
+
+	img {
+		display: block;
+		margin: 12px 6px;
+	}
+}
+
+.control-container {
+	position: relative;
+	height: 100%;
+}
+
+.clear {
+	clear: both;
+}
+
+#reset {
+	position: absolute;
+	bottom: 12px; left: 3px; right: 3px;
+}

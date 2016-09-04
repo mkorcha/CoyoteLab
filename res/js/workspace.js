@@ -32,12 +32,15 @@ Terminal.prototype.wssh = function(wsendpoint) {
 function workspace_init(element, endpoint) {
 	/**
 	 * Creates a new Terminal object and embeds it into the given element,
-	 * connected to the given websocket endpoint directed to wssh
+	 * connected to the given websocket endpoint directed to wssh.
 	 */
-	var term = new Terminal({cursorBlink: true});
+	var term = new Terminal({
+		cols: 80,
+		rows: 24,
+		cursorBlink: true
+	});
 
 	term.open(element);
-	term.fit()
 
 	term.wssh(endpoint);
 }
