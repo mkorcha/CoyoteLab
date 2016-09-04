@@ -7,23 +7,33 @@
 
 {% block main %}
 <h2>{{ course.name }}</h2>
-<h3>Workspace</h3>
+<h3>
+{% if user %}
+{{ user.name }}'s Student
+{% elif is_instructor() %}
+Instructor
+{% else %}
+Student
+{% endif %}
+ Workspace
+</h3>
 
-<p>This is your workspace for the course. On the left, you have your terminal connected to a personal Linux machine. On the right, there are some controls that allow you to restart, reconnect, and reset your machine.</p>
+<p>This is your workspace for the course. On the left, you have your terminal connected to a personal Linux machine. On the right, there are some controls that allow you to restart and reset your machine.</p>
 
 <div class="workspace">
 	<div id="terminal"></div>
 	<div class="controls">
 		<div class="control-container">
-			<a href="#" id="reconnect">
-				<img src="{{ url_for('static', filename='img/reconnect.png') }}">
-			</a>
-			<a href="{{ url_for('workspace.workspace', course_id=course.id) }}">
+			<a href="{{ url_for('workspace.workspace', course_id=course.id, student_id=user.id if user else None) }}">
 				<img src="{{ url_for('static', filename='img/restart.png') }}">
 			</a>
+			{# should be sufficient as the rest of the ownerships are done
+			   before this template can even be rendered #}
+			{% if not is_instructor() or not user %}
 			<a href="{{ url_for('workspace.reset', course_id=course.id) }}" id="reset">
 				<img src="{{ url_for('static', filename='img/reset.png') }}">
 			</a>
+			{% endif %}
 		</div>
 	</div>
 </div>
@@ -37,7 +47,7 @@
 <script type="application/javascript">
     document.onreadystatechange = function() {
         if(document.readyState == 'complete' || document.readyState == 'loaded') {
-            workspace_init(document.getElementById('terminal'), fix_prefix('{{ url_for("workspace.connect", course_id=course.id, student_id=user.id if user else None, _external=True) }}'));
+           workspace_init(document.getElementById('terminal'), fix_prefix('{{ url_for("workspace.connect", course_id=course.id, student_id=user.id if user else None, _external=True) }}'));
         }
     }
 </script>

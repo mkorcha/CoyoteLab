@@ -1,36 +1,29 @@
 .workspace {
-	width: 636px;
+	width: 648px;
 	margin: 0 auto;
 
 	display: flex;
 	
 	background: #000000;
 
-	padding-top: 8px;
-
-	border: #000 solid 5px;
+	margin-top: 8px;
 }
 
-.terminal {
-	color: #f0f0f0;
-
-	line-height: 130%;
-	font-family: "Source Code Pro", monospace;
-	font-size: 12px;
-	
-	width: 600px;
+#terminal {
+	border: #000000 solid 8px;
 
 	flex: 0 0 600px;
 }
 
 .controls {
-	width: 36px;
+	width: 48px;
 
 	flex: 1;
 
 	img {
 		display: block;
-		margin: 12px 6px;
+		margin: 8px 4px;
+		width: 16px; height: 16px;
 	}
 }
 
@@ -45,5 +38,14 @@
 
 #reset {
 	position: absolute;
-	bottom: 12px; left: 3px; right: 3px;
+	bottom: 8px;
+}
+
+// overriding some xterm.js stuff
+.terminal {
+	color: #f0f0f0;
+
+	line-height: 130%;
+	font-family: "Source Code Pro", monospace;
+	font-size: 12px;
 }

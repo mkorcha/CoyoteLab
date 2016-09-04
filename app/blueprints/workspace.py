@@ -119,7 +119,7 @@ def connect(course_id, student_id=None):
 
 
 @blueprint.route('/<course_id>/reset')
-def reset(course_id, student_id):
+def reset(course_id):
 	'''
 	Recreates the user's machine
 	'''
