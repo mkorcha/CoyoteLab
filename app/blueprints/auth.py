@@ -18,6 +18,7 @@ def filter():
 	# in a bunch of stuff each time
 	# TODO: I feel like there is a better way to do this
 	current_app.jinja_env.globals['authenticated'] = auth.authenticated
+	current_app.jinja_env.globals['current_user']  = lambda: auth.session_user()
 	current_app.jinja_env.globals['is_instructor'] = lambda: auth.session_user().has_role(auth.ROLE_INSTRUCTOR)
 	current_app.jinja_env.globals['is_student']    = lambda: auth.session_user().has_role(auth.ROLE_STUDENT)
 

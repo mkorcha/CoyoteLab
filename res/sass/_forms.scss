@@ -1,16 +1,6 @@
-table.form {
-	width: 100%;
-
-	margin-bottom: 8px;
-
-	.label-cell {
-		white-space: nowrap;
-	}
-
-	.field-cell {
-		width: 100%;
-		padding-left: 1em;
-	}
+table.form .compact {
+	padding-left: 1em;
+	text-align: left;
 }
 
 textarea,
@@ -79,10 +69,6 @@ input[type=button], input[type=submit] {
 
 label {
 	color: $text_secondary;
-}
-
-.button-holder {
-	text-align: right;
 }
 
 .error {

@@ -1,14 +1,22 @@
-<h1>{{ course.name }}</h1>
-<h2>{{ course.instructor.name }}</h2>
+{% extends 'base.jinja' %}
 
-<pre>{{ course.description }}</pre>
+{% block main %}
+<div class="page-head">
+	<h2>{{ course.name }}</h2>
+	<h3>{{ course.instructor.name }}</h3>
 
-Duration: {{ course.start_date }} to {{ course.end_date }}<br><br>
+	<div class="page-nav">
+		{% if course.webpage %}
+		<a href="{{ course.webpage }}">Course Webpage</a> |
+		{% endif %}
+		<a href="mailto:{{ course.instructor.email }}">Contact Instructor</a> | 
+		<a href="{{ url_for('student.drop_course', course_id=course.id) }}">Leave Course</a>
+	</div>
+</div>
 
-{% if course.webpage %}
-<a href="{{ course.webpage }}">Course Webpage</a><br>
-{% endif %}
-<a href="mailto:{{ course.instructor.email }}">Contact Instructor</a><br>
-<br>
-<br>
-<a href="{{ url_for('student.drop_course', course_id=course.id) }}">Drop Course</a>
+<p>
+	Course runs from {{ course.start_date.strftime('%b %d, %Y') }} to {{ course.end_date.strftime('%b %d, %Y') }}.
+</p>
+
+<p>{{ course.description }}</p>
+{% endblock %}

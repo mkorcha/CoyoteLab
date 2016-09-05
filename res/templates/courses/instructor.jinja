@@ -1,17 +1,45 @@
-{% if get_flashed_messages() %}
-<div class="alert">{{ get_flashed_messages()[0] }}</div>
-{% endif %}
+{% extends 'base.jinja' %}
 
-<h1>Courses</h1>
+{% block main %}
+<div class="page-head">
+	<h2>Courses</h2>
+	<h3>{{ current_user().name }}</h3>
+
+	<div class="page-nav">
+		<a href="{{ url_for('instructor.add_course') }}">Add Course</a>
+	</div>
+</div>
 
 {% if courses %}
-<ul>
-{% for course in courses %}
-	<li>{{ course.name }} - {{ course.students|count }} students. <a href="{{ url_for('instructor.edit_course', course_id=course.id) }}">Edit</a> <a href="{{ url_for('instructor.students', course_id=course.id) }}">Students</a> <a href="{{ url_for('workspace.workspace', course_id=course.id) }}">Workspace</a></li>
-{% endfor %}
-</ul>
-{% else %}
-No courses found!
-{% endif %}
+<p>This is a listing of all of the courses you are the instructor of. To create a course, use the link above.</p>
 
-<a href="{{ url_for('instructor.add_course') }}">Add course</a>
+<table>
+	<thead>
+		<tr>
+			<th style="text-align: left">Course Name</th>
+			<th>Students</th>
+			<th colspan="3">Options</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for course in courses %}
+		<tr>
+			<td class="expand">{{ course.name }}</td>
+			<td class="compact">{{ course.students|count }}</td>
+			<td class="compact">
+				<a href="{{ url_for('instructor.edit_course', course_id=course.id) }}">Edit</a>
+			</td>
+			<td class="compact">
+				<a href="{{ url_for('instructor.students', course_id=course.id) }}">Students</a>
+			</td>
+			<td class="compact">
+				<a href="{{ url_for('workspace.workspace', course_id=course.id) }}">Workspace</a>
+			</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+{% else %}
+No courses found. Use the link above to create a new one.
+{% endif %}
+{% endblock %}

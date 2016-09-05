@@ -1,7 +1,7 @@
 from flask import Blueprint, session, redirect, render_template, url_for, flash, abort
 from flask_mail import Message as Email
 from ..auth import authenticated, session_user, ROLE_INSTRUCTOR, ROLE_STUDENT
-from ..models import User, Course, Enrollment
+from ..models import User, Course, Enrollment, Machine
 from ..forms.course import CourseForm
 from ..forms.user import UserForm
 from ..forms.students import StudentFileForm
@@ -55,6 +55,8 @@ def add_course():
 		# autopopulation is an amazing thing
 		form.populate_obj(new_course)
 		new_course.instructor = session_user()
+		# currently only one base machine
+		new_course.base_machine_id = 1
 		
 		db.session.add(new_course)
 		db.session.commit()

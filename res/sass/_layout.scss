@@ -104,6 +104,25 @@ a {
 	}
 }
 
+table {
+	width: 100%;
+
+	margin-bottom: 8px;
+
+	.compact {
+		white-space: nowrap;
+		text-align: center;
+	}
+
+	.expand {
+		width: 100%;
+	}
+
+	th, td {
+		padding: .5em;
+	}
+}
+
 .notice {
 	padding: 8px;
 	margin-bottom: 12px;
@@ -111,4 +130,17 @@ a {
 	border-radius: 4px;
 
 	background-color: $background;
+}
+
+.set-right {
+	text-align: right;
+}
+
+.page-nav {
+	position: absolute;
+	top: 8px; right: 0;
+}
+
+.page-head {
+	position: relative;
 }

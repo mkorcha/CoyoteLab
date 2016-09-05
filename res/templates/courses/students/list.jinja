@@ -1,17 +1,31 @@
-{% if get_flashed_messages() %}
-<div class="alert">{{ get_flashed_messages()[0] }}</div>
-{% endif %}
+{% extends 'base.jinja' %}
 
-<h1>{{ course.name }}</h1>
+{% block main %}
+<div class="page-head">
+	<h2>{{ course.name }}</h2>
+	<h3>Student Management</h3>
+
+	<div class="page-nav">
+		<a href="{{ url_for('instructor.add_student', course_id=course.id) }}">Add Student</a> | 
+		<a href="{{ url_for('instructor.add_many_students', course_id=course.id) }}">Add Students From File</a>
+	</div>
+</div>
 
 {% if course.students|count %}
-<ul>
+<table>
 {% for student in course.students %}
-	<li>{{ student.name }} <a href="{{ url_for('instructor.toggle_enrollment', course_id=course.id, user_id=student.id) }}">{{ "Drop" if student.active_in(course) else "Re-add" }}</a> <a href="{{ url_for('workspace.workspace', course_id=course.id, student_id=student.id) }}">Workspace</a></li>
+	<tr>
+		<td class="expand">{{ student.name }}</td>
+		<td class="compact">
+			<a href="{{ url_for('instructor.toggle_enrollment', course_id=course.id, user_id=student.id) }}">{{ "Drop" if student.active_in(course) else "Re-add" }}</a>
+		</td>
+		<td class="compact">
+			<a href="{{ url_for('workspace.workspace', course_id=course.id, student_id=student.id) }}">Workspace</a>
+		</td>
+	</tr>
 {% endfor %}
+</table>
 {% else %}
-No students found!
+<p>No students found for this course. Use the options above to add students.</p>
 {% endif %}
-
-<a href="{{ url_for('instructor.add_student', course_id=course.id) }}">Add Student</a>
-<a href="{{ url_for('instructor.add_many_students', course_id=course.id) }}">Add Students From File</a>
+{% endblock %}
