@@ -14,14 +14,14 @@ Terminal.prototype.wssh = function(wsendpoint) {
 
 	client.connect(wsendpoint, {
 		onError: function(error) {
-			term.write('Error: ' + error + '\r\n');
+			term.write('An error has occurred. Please refresh.\r\n');
 		},
 		onConnect: function() {
 			// Erase our connecting message
 			term.write('\r');
 		},
 		onClose: function() {
-			term.write('Connection Reset By Peer');
+			term.write('Connection Reset By Peer. Please refresh.\r\n');
 		},
 		onData: function(data) {
 			term.write(data);
