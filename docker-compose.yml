@@ -1,0 +1,32 @@
+version: '2'
+services:
+  app:
+    build: docker/app
+    volumes:
+      - .:/var/app/project
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DOCKER=1
+
+  nginx:
+    image: nginx:1.11.3-alpine
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./docker/nginx:/etc/nginx/conf.d
+    depends_on:
+      - app
+
+  postgres:
+    image: postgres:9.5.4
+    environment:
+    # change these for production!
+     - POSTGRES_USER=dbuser
+     - POSTGRES_PASSWORD=dbuserpassword
+     - POSTGRES_DB=coyotedb
+
+  redis:
+    image: redis:3.2.3-alpine

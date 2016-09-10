@@ -27,7 +27,7 @@ def lxd_client():
 	a trusted connection cannot be established
 	'''
 	client = LXD(endpoint=current_app.config['LXD_ADDRESS'], 
-		         cert=(os.path.join(os.getcwd(), 'lxd.crt'), os.path.join(os.getcwd(), 'lxd.key')),
+		         cert=(os.path.join(os.getcwd(), 'cert.crt'), os.path.join(os.getcwd(), 'cert.key')),
 		         # we have a self-signed cert, this is fine for development purposes
 		         verify=False)
 	client.authenticate(current_app.config['LXD_TRUST_PASSWORD'])

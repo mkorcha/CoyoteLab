@@ -8,3 +8,4 @@ uploads
 *.csr
 node_modules
 public
+*\~

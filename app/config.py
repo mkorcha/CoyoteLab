@@ -10,7 +10,7 @@ class DefaultConfig:
 	# Session configuration
 	PERMANENT_SESSION_LIFETIME = datetime.timedelta(days=365)
 	SECRET_KEY = rand_str(32)
-	SESSION_COOKIE_NAME = 'acm-csusb'
+	SESSION_COOKIE_NAME = 'coyotelab'
 	SESSION_KEY_BITS = 256
 	SESSION_STORE = RedisStore(redis.StrictRedis())
 
@@ -45,9 +45,15 @@ class DevConfig(DefaultConfig):
 	DEBUG = True
 	TESTING = True
 
-	SERVER_NAME = 'localhost:8080'
-
 	# SQL database configuration
 	SQLALCHEMY_DATABASE_URI = 'postgresql://dbuser:dbuser@localhost/db'
 	SQLALCHEMY_POOL_SIZE = 1
+
+
+class DockerConfig(DevConfig):
+	# use Redis container
+	SESSION_STORE = RedisStore(redis.StrictRedis(host='redis'))
+
+	# use Postgres container
+	SQLALCHEMY_DATABASE_URI = 'postgresql://dbuser:dbuserpassword@postgres/coyotedb'
 	

@@ -1,7 +1,8 @@
-import datetime, time
+import datetime, time, os
 from flask_script import Manager, Shell, prompt_bool
 from flask_migrate import MigrateCommand
 from gevent.pywsgi import WSGIServer
+from gevent.pool import Pool
 from geventwebsocket.handler import WebSocketHandler
 from subprocess import Popen
 from app import config, db, get_app, models, auth
@@ -10,7 +11,17 @@ from app.auth import pwhash
 from app.util import lxd_client
 
 
-app = get_app(config.DevConfig)
+if 'DOCKER' in os.environ:
+	# fix the config to use the HOST_IP we get as an environment variable
+	# when it starts. this makes the assumption that lxd is running on the
+	# host
+	# TODO: see if there is potentially another way to do this
+	docker_config = config.DockerConfig
+	docker_config.LXD_ADDRESS = 'https://'+ os.environ['HOST_IP'] +':8443'
+
+	app = get_app(docker_config)
+else:
+	app = get_app(config.DevConfig)
 
 
 manager = Manager(app, with_default_commands=False)
@@ -110,7 +121,8 @@ def run():
 	'Run built-in development server'
 	Popen('gulp', shell=True)
 
-	server = WSGIServer(('0.0.0.0', 8080), get_app(config.DevConfig), handler_class=WebSocketHandler)
+	pool   = Pool(2500)
+	server = WSGIServer(('0.0.0.0', 8080), app, handler_class=WebSocketHandler, spawn=pool)
 
 	try:
 		server.serve_forever()

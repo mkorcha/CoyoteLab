@@ -75,7 +75,11 @@ def connect(course_id, student_id=None):
 
 	# start the machine if need be and wait for the network to come online, 
 	# then get the address to connect to
-	container.start(wait=True)
+	try:
+		container.start(wait=True)
+	except:
+		# cause the container is already running
+		pass
 
 	while len(container.state().network['eth0']['addresses']) < 2:
 		time.sleep(1)
