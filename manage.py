@@ -8,7 +8,7 @@ from subprocess import Popen
 from app import config, db, get_app, models, auth
 from app.models import User, Course, Machine
 from app.auth import pwhash
-from app.util import lxd_client
+from app.util import lxd_client, rand_str
 
 
 if 'DOCKER' in os.environ:
@@ -114,6 +114,31 @@ def populate():
 	db.session.commit()
 
 	print("Sample data generated")
+
+
+@manager.command
+def adduser(user_type, email, password=None, name=''):
+	'Generate user'
+	gen_password = rand_str(8) if password == None else password
+
+	user = User()
+	user.username = email
+	user.password = gen_password
+	user.email = email
+	user.name = name
+
+	if user_type == 'instructor':
+		user.roles = auth.ROLE_INSTRUCTOR
+	elif user_type == 'student':
+		user.roles = auth.ROLE_STUDENT
+	else:
+		print('user_type must be either "instructor" or "student"')
+		return
+
+	db.session.add(user)
+	db.session.commit()
+
+	print('User {name} successfully created with password "{password}"'.format(name=name if len(name) else email, password=gen_password))
 
 
 @manager.command

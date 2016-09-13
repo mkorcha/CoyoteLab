@@ -30,5 +30,6 @@ Vagrant.configure(2) do |config|
     sudo -u postgres psql -c "create database db;"
     sudo -u postgres psql -c "create user dbuser with password 'dbuser';"
     sudo -u postgres psql -c "grant all on database db to dbuser;"
+    sudo npm install -g gulp
   SHELL
 end
