@@ -20,6 +20,9 @@
 			<a href="{{ url_for('instructor.toggle_enrollment', course_id=course.id, user_id=student.id) }}">{{ "Drop" if student.active_in(course) else "Re-add" }}</a>
 		</td>
 		<td class="compact">
+			<a href="mailto:{{ student.email }}">Email</a>
+		</td>
+		<td class="compact">
 			<a href="{{ url_for('workspace.workspace', course_id=course.id, student_id=student.id) }}">Workspace</a>
 		</td>
 	</tr>

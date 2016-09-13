@@ -155,7 +155,7 @@ def add_many_students(course_id):
 
 		for entry in file:
 			entry = entry.strip().split(',')
-			username = entry[0]
+			name  = entry[0]
 			email = entry[1]
 
 			user = User.query.filter_by(email=email).first()
@@ -164,10 +164,10 @@ def add_many_students(course_id):
 				user = User()
 				password = rand_str(12)
 
-				user.username = username
+				user.username = email
 				user.email = email
 				user.password = password
-				user.name = username
+				user.name = name
 
 				messages.append(Email(subject="New Account", recipients=[user.email], body="You now have an account. Your username is:\n\n{username}\n\nYour temporary password is:\n\n{password}".format(username=user.username, password=password)))
 
