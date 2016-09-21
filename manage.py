@@ -82,9 +82,9 @@ def populate():
 
 @manager.command
 def lxd_init():
-	if not Machine.query.all():
-		lxd = lxd_client()
+	lxd = lxd_client()
 
+	if not Machine.query.all() and not lxd.containers.get('ubuntu-1604'):
 		base = lxd.containers.create({
 				'name': 'ubuntu-1604',
 				'source': {

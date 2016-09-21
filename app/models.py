@@ -193,14 +193,18 @@ class Machine(db.Model):
 		if not user.active_in(course) and course.instructor != user:
 			return
 
-		container = Machine.get(user, course)
-
-		if container == None:
-			return
+		container, model = Machine.get(user, course)
 
 		# remove the container from lxd
-		container[0].delete(wait=True)
+		if container:
+			try:
+				container.stop(wait=True)
+			except:
+				pass
+			finally:
+				container.delete(wait=True)
 
-		# remove it from the database
-		db.session.delete(container[1])
-		db.session.commit()
+		# remove any record of it from the db
+		if model:
+			db.session.delete(model)
+			db.session.commit()
