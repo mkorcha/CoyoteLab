@@ -4,10 +4,16 @@
 	{% if field.name != 'csrf_token' and field.name != 'submit' %}
 	<tr>
 		<td class="compact">
-			{{ field.label }}
+			{{ field.label }} {% if field.flags.required %}*{% endif %}
 		</td>
 		<td class="expand">
 			{{ field(**kwargs)|safe }}
+
+			{% if field.description %}
+			<div class="help">
+				{{ field.description }}
+			</div>
+			{% endif %}
 
 			{% if field.errors %}
 				{% for error in field.errors %}

@@ -71,11 +71,13 @@ label {
 	color: $text_secondary;
 }
 
-.error {
+.help, .error {
 	margin: 6px 0;
 	
 	font-size: 12px;
 	text-align: right;
+}
 
+.error {
 	color: $invalid;
 }
