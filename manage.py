@@ -5,6 +5,7 @@ from gevent.pywsgi import WSGIServer
 from gevent.pool import Pool
 from geventwebsocket.handler import WebSocketHandler
 from subprocess import Popen
+from pylxd.exceptions import LXDAPIException
 from app import config, db, get_app, models, auth
 from app.models import User, Course, Machine
 from app.auth import pwhash
@@ -84,7 +85,11 @@ def populate():
 def lxd_init():
 	lxd = lxd_client()
 
-	if not Machine.query.all() and not lxd.containers.get('ubuntu-1604'):
+	try:
+		lxd.containers.get('ubuntu-1604')
+
+		print('Base container already exists')
+	except LXDAPIException:
 		base = lxd.containers.create({
 				'name': 'ubuntu-1604',
 				'source': {
