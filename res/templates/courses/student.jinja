@@ -19,7 +19,7 @@
 		<tr>
 			<td class="expand">{{ course.name }} - {{ course.instructor.name }}</td>
 			<td class="compact">
-				<a href="{{ url_for('student.download_files', course_id=course.id) }}" target="_blank">Download Files</a>
+				<a href="{{ url_for('workspace.download_files', course_id=course.id) }}" target="_blank">Download Files</a>
 			</td>
 			<td class="compact">
 				<a href="{{ url_for('student.course_info', course_id=course.id) }}">Course Info</a>

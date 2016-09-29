@@ -1,9 +1,11 @@
 from gevent import monkey
 monkey.patch_all()
 
-import time
+import time, os
+from io import BytesIO
+from zipfile import ZipFile, ZIP_DEFLATED
 from datetime import datetime
-from flask import Blueprint, request, redirect, url_for, abort, render_template
+from flask import Blueprint, request, redirect, url_for, abort, render_template, current_app, send_file
 from werkzeug.exceptions import BadRequest
 from wssh import WSSHBridge
 from ..auth import authenticated, session_user
@@ -133,3 +135,29 @@ def reset(course_id):
 	Machine.delete(session_user(), course)
 
 	return redirect(url_for('workspace.workspace', course_id=course_id))
+
+
+@blueprint.route('/<course_id>/download')
+@blueprint.route('/<course_id>/download/<student_id>')
+def download_files(course_id, student_id=None):
+	'''
+	Creates a zip file of a user's files for a given course and returns it to
+	the browser so it can be downloaded
+	'''
+	course = get_course(course_id)
+	user = get_student(course, student_id) if student_id else session_user()
+	
+	file = BytesIO()
+	zipfile = ZipFile(file, 'w', ZIP_DEFLATED)
+
+	path = current_app.config['USER_COURSE_FILE_DIR'].format(user_id=user.id, course_id=course_id)
+
+	for root, dirs, files in os.walk(path):
+		for obj in dirs + files:
+			file_path = os.path.join(root, obj)
+			zipfile.write(file_path, file_path.replace(path, ''))
+
+	zipfile.close()
+	file.seek(0)
+
+	return send_file(file, attachment_filename=(course.name + '-' + user.name).replace(' ', '') + '.zip', as_attachment=True, mimetype='application/x-zip-compressed')

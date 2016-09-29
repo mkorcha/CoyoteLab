@@ -13,6 +13,12 @@
 
 {% if course.students|count %}
 <table>
+	<thead>
+		<tr>
+			<th style="text-align: left">Name</th>
+			<th colspan="4">Options</th>
+		</tr>
+	</thead>
 {% for student in course.students %}
 	<tr>
 		<td class="expand">{{ student.name }}</td>
@@ -21,6 +27,9 @@
 		</td>
 		<td class="compact">
 			<a href="mailto:{{ student.email }}">Email</a>
+		</td>
+		<td class="compact">
+			<a href="{{ url_for('workspace.download_files', course_id=course.id, student_id=student.id) }}">Download Files</a>
 		</td>
 		<td class="compact">
 			<a href="{{ url_for('workspace.workspace', course_id=course.id, student_id=student.id) }}">Workspace</a>

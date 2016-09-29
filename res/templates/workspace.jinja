@@ -27,7 +27,7 @@ Student
 			<a href="{{ url_for('workspace.workspace', course_id=course.id, student_id=user.id if user else None) }}">
 				<img src="{{ url_for('static', filename='img/restart.png') }}">
 			</a>
-			<a href="{{ url_for('student.download_files', course_id=course.id) }}">
+			<a href="{{ url_for('workspace.download_files', course_id=course.id, student_id=user.id if user else None) }}">
 				<img src="{{ url_for('static', filename='img/download.png') }}">
 			</a>
 			{# should be sufficient as the rest of the ownerships are done
