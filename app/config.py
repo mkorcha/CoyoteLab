@@ -37,7 +37,7 @@ class DefaultConfig:
 	# The following are templates, with the following parameters:
 	# {user_id} - a user's ID
 	# {course_id} - a course ID
-	USER_COURSE_FILE_DIR = 'files/u{user_id}/c{course_id}'
+	USER_COURSE_FILE_DIR = '/var/lib/lxd/containers/user-c{course_id}-u{user_id}/rootfs/home/coyote'
 	USER_CONTAINER_NAME = 'user-c{course_id}-u{user_id}'
 	
 
@@ -56,4 +56,6 @@ class DockerConfig(DevConfig):
 
 	# use Postgres container
 	SQLALCHEMY_DATABASE_URI = 'postgresql://dbuser:dbuserpassword@postgres/coyotedb'
+
+	USER_COURSE_FILE_DIR = '../files/user-c{course_id}-u{user_id}/rootfs/home/coyote'
 	

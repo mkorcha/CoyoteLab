@@ -4,6 +4,7 @@ services:
     build: docker/app
     volumes:
       - .:/var/app/project
+      - /var/lib/lxd/containers/:/var/app/files:ro
     depends_on:
       - postgres
       - redis
