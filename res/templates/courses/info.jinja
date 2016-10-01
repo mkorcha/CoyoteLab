@@ -9,8 +9,7 @@
 		{% if course.webpage %}
 		<a href="{{ course.webpage }}">Course Webpage</a> |
 		{% endif %}
-		<a href="mailto:{{ course.instructor.email }}">Contact Instructor</a> | 
-		<a href="{{ url_for('student.drop_course', course_id=course.id) }}">Leave Course</a>
+		<a href="mailto:{{ course.instructor.email }}">Contact Instructor</a>
 	</div>
 </div>
 

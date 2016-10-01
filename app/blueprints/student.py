@@ -50,25 +50,3 @@ def course_info(course_id):
 	'''
 	course = get_course(course_id)
 	return render_template('courses/info.jinja', course=course)
-
-
-@blueprint.route('/course/<course_id>/drop')
-def drop_course(course_id):
-	'''
-	Allows a student to drop from a course. The instructor will have to add 
-	them back if they return
-	'''
-	course = get_course(course_id)
-
-	enrollment = Enrollment.query.filter_by(course=course, user=session_user()).first()
-
-	if enrollment == None:
-		abort(404)
-
-	enrollment.enabled = False
-
-	db.session.commit()
-
-	flash('Course dropped')
-
-	return redirect(url_for('student.courses'))
