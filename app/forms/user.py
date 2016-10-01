@@ -22,3 +22,13 @@ class UserPasswordForm(Form):
 	confirm = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new', message='Passwords must match'), Length(min=8)])
 
 	submit = SubmitField('Submit', validators=[DataRequired()])
+
+
+class PasswordResetForm(Form):
+	'''
+	Form used to request a password reset
+	'''
+	email = StringField('Email Address', validators=[DataRequired(), Email()])
+
+	submit = SubmitField('Reset', validators=[DataRequired()])
+	

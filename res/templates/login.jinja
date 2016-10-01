@@ -3,7 +3,7 @@
 {% block main %}
 <h2>Log In</h2>
 
-<p>Enter your username and password to continue. If you aren't sure of your login details, check your email or get in touch with your instructor.</p>
+<p>Enter your username and password to continue. If you aren't sure of your login details, check your email or get in touch with your instructor. If you forgot your password, <a href="{{ url_for('auth.forgot_password') }}">you can have it reset</a>.</p>
 
 {{ super() }}
 {% endblock %}

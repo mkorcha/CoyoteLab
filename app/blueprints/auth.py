@@ -1,8 +1,10 @@
 from flask import Blueprint, url_for, redirect, flash, render_template, request, current_app
+from flask_mail import Message as Email
 from ..forms.login import LoginForm
-from ..forms.user import UserPasswordForm
-from ..util import require_login
-from .. import auth, db
+from ..forms.user import UserPasswordForm, PasswordResetForm
+from ..models import User
+from ..util import require_login, rand_str
+from .. import auth, db, mail
 
 
 blueprint = Blueprint('auth', __name__)
@@ -89,3 +91,32 @@ def change_password():
 		return redirect(url_for('auth.login'))
 
 	return render_template('user/change_pw.jinja', form=form)
+
+
+@blueprint.route('/forgot_pw', methods=['GET', 'POST'])
+def forgot_password():
+	'''
+	Handles a user who forgot their password
+	'''
+	form = PasswordResetForm()
+
+	if form.validate_on_submit():
+		user = User.query.filter_by(email=form.email.data).first()
+
+		if user:
+			password = rand_str(12)
+
+			user.password = password
+			user.temporary_pw = True
+
+			message = Email(subject='Password Reset', recipients=[user.email], html=render_template('email/reset_pw.jinja', password=password))
+
+			db.session.commit()
+
+			mail.send(message)
+
+		flash('Instructions to reset your password have been sent to the email provided.')
+
+		return redirect(url_for('auth.login'))
+
+	return render_template('user/reset_pw.jinja', form=form)
