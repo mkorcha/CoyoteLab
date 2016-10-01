@@ -42,7 +42,7 @@ h1, h2, h3 {
 	display: inline-block;
 }
 
-h1 {
+h1, h1 a, h1 a:hover {
 	color: $text_light;
 }
 
