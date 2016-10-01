@@ -3,8 +3,10 @@ from flask_mail import Message as Email
 from ..forms.login import LoginForm
 from ..forms.user import UserPasswordForm, PasswordResetForm
 from ..models import User
-from ..util import require_login, rand_str
-from .. import auth, db, mail
+from ..util import auth
+from ..util.auth import require_login
+from ..util.str import rand_str
+from .. import db, mail
 
 
 blueprint = Blueprint('auth', __name__)

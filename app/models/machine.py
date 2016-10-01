@@ -26,7 +26,7 @@ class Machine(db.Model):
 		if not user.active_in(course) and course.instructor != user:
 			return None
 
-		from ..util import lxd_client
+		from ..util.lxd import lxd_client
 		lxd = lxd_client()
 		
 		pair = Machine.get(user, course)
@@ -67,7 +67,7 @@ class Machine(db.Model):
 		if not user.active_in(course) and course.instructor != user:
 			return None
 
-		from ..util import lxd_client
+		from ..util.lxd import lxd_client
 		lxd = lxd_client()
 
 		name = current_app.config['USER_CONTAINER_NAME'].format(course_id=course.id, user_id=user.id)

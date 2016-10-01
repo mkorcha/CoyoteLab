@@ -1,11 +1,11 @@
 from flask import Blueprint, session, redirect, render_template, url_for, flash, abort, current_app
 from flask_mail import Message as Email
-from ..auth import authenticated, session_user, ROLE_INSTRUCTOR, ROLE_STUDENT
+from ..util.auth import authenticated, session_user, ROLE_INSTRUCTOR, ROLE_STUDENT
 from ..models import User, Course, Enrollment, Machine
 from ..forms.course import CourseForm
 from ..forms.user import UserForm
 from ..forms.students import StudentFileForm
-from ..util import rand_str
+from ..util.str import rand_str
 from .. import db, mail
 
 

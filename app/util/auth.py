@@ -1,7 +1,9 @@
-import bcrypt
-from models import User
-from flask import current_app, session
+from functools import wraps
 
+import bcrypt
+from flask import current_app, session, redirect, url_for
+
+from ..models import User
 
 # Roles are a finite set of a few different roles. The easy way to do this is
 # to just have a bitwise OR operation to grant multiple roles to a user. For
@@ -57,3 +59,15 @@ def session_user():
 	Get the currently logged in user
 	'''
 	return User.query.get(session['user']) if 'user' in session else None
+
+def require_login(route_func):
+	'''
+	Decorator that requires that a user is logged in, or they will be redirected
+	'''
+	@wraps(route_func)
+	def wrapper(*args, **kwargs):
+		if not authenticated():
+			return redirect(url_for('auth.login'))
+		return route_func(*args, **kwargs)
+	return wrapper
+	

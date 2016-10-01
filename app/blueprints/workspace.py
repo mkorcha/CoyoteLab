@@ -8,7 +8,7 @@ from datetime import datetime
 from flask import Blueprint, request, redirect, url_for, abort, render_template, current_app, send_file
 from werkzeug.exceptions import BadRequest
 from wssh import WSSHBridge
-from ..auth import authenticated, session_user
+from ..util.auth import authenticated, session_user
 from ..models import Course, Machine, User
 from .. import db
 

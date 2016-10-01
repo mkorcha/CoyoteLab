@@ -6,10 +6,12 @@ from gevent.pool import Pool
 from geventwebsocket.handler import WebSocketHandler
 from subprocess import Popen
 from pylxd.exceptions import LXDAPIException
-from app import config, db, get_app, models, auth
+from app import config, db, get_app, models
 from app.models import User, Course, Machine
-from app.auth import pwhash
-from app.util import lxd_client, rand_str
+from app.util import auth
+from app.util.auth import pwhash
+from app.util.str import rand_str
+from app.util.lxd import lxd_client
 
 
 app = get_app(config.Config)

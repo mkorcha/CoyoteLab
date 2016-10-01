@@ -37,7 +37,7 @@ class User(db.Model):
 		'''
 		Sets the password to the hash of the provided value
 		'''
-		from .auth import pwhash
+		from ..util.auth import pwhash
 		self._password = pwhash(value)
 
 
