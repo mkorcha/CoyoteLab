@@ -121,6 +121,12 @@ table {
 	th, td {
 		padding: .5em;
 	}
+
+	&:not(.form) {
+		tr:nth-child(even) {
+			background-color: $accent_row;
+		}
+	}
 }
 
 .notice {
