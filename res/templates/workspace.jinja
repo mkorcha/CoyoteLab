@@ -52,6 +52,8 @@ Student
         if(document.readyState == 'complete' || document.readyState == 'loaded') {
            workspace_init(document.getElementById('terminal'), fix_prefix('{{ url_for("workspace.connect", course_id=course.id, student_id=user.id if user else None, _external=True) }}'));
         }
+
+        document.getElementById('reset').onclick = confirm_reset;
     }
 </script>
 {% endblock %}

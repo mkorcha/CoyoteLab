@@ -58,3 +58,11 @@ function fix_prefix(endpoint) {
 
 	return 'ws://' + endpoint;
 }
+
+function confirm_reset(event) {
+	var text = "Are you sure you wish to reset your machine? All files will be lost (to save these, use the download files button)!";
+
+	if(!confirm(text)) {
+		event.preventDefault();
+	}
+}
