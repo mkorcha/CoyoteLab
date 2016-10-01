@@ -1,4 +1,4 @@
-from flask import Blueprint, session, redirect, render_template, url_for, flash, abort
+from flask import Blueprint, session, redirect, render_template, url_for, flash, abort, current_app
 from flask_mail import Message as Email
 from ..auth import authenticated, session_user, ROLE_INSTRUCTOR, ROLE_STUDENT
 from ..models import User, Course, Enrollment, Machine
@@ -120,7 +120,7 @@ def add_student(course_id):
 			password = rand_str(12)
 			user.password = password
 
-			message = Email(subject="New Account", recipients=[user.email], body="You now have an account. Your username is:\n\n{username}\n\nYour temporary password is:\n\n{password}".format(username=user.username, password=password))
+			message = Email(subject="New Account", recipients=[user.email], html=render_template('email/new_account.jinja', username=user.username, password=password, url=current_app.config['BASE_URL'] + url_for('auth.login')))
 
 			db.session.add(user)
 
@@ -169,7 +169,7 @@ def add_many_students(course_id):
 				user.password = password
 				user.name = name
 
-				messages.append(Email(subject="New Account", recipients=[user.email], body="You now have an account. Your username is:\n\n{username}\n\nYour temporary password is:\n\n{password}".format(username=user.username, password=password)))
+				messages.append(Email(subject="New Account", recipients=[user.email], html=render_template('email/new_account.jinja', username=user.username, password=password, url=current_app.config['BASE_URL'] + url_for('auth.login'))))
 
 				db.session.add(user)
 

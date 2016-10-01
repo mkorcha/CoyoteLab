@@ -27,6 +27,8 @@ class DefaultConfig:
 	MAIL_USE_SSL = False
 	MAIL_USERNAME = ''
 	MAIL_PASSWORD = ''
+	# used for generating links in emails
+	BASE_URL = 'https://localhost'
 
 	# LXD config
 	LXD_ADDRESS = 'https://localhost:8443'
