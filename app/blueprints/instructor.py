@@ -120,7 +120,7 @@ def add_student(course_id):
 			password = rand_str(12)
 			user.password = password
 
-			message = Email(subject="New Account", recipients=[user.email], html=render_template('email/new_account.jinja', username=user.username, password=password, url=current_app.config['BASE_URL'] + url_for('auth.login')))
+			message = Email(subject="New Account", recipients=[user.email], html=render_template('email/new_account.jinja', username=user.username, password=password, url=current_app.config['MAIL_BASE_URL'] + url_for('auth.login')))
 
 			db.session.add(user)
 
@@ -169,7 +169,7 @@ def add_many_students(course_id):
 				user.password = password
 				user.name = name
 
-				messages.append(Email(subject="New Account", recipients=[user.email], html=render_template('email/new_account.jinja', username=user.username, password=password, url=current_app.config['BASE_URL'] + url_for('auth.login'))))
+				messages.append(Email(subject="New Account", recipients=[user.email], html=render_template('email/new_account.jinja', username=user.username, password=password, url=current_app.config['MAIL_BASE_URL'] + url_for('auth.login'))))
 
 				db.session.add(user)
 

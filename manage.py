@@ -12,17 +12,7 @@ from app.auth import pwhash
 from app.util import lxd_client, rand_str
 
 
-if 'DOCKER' in os.environ:
-	# fix the config to use the HOST_IP we get as an environment variable
-	# when it starts. this makes the assumption that lxd is running on the
-	# host
-	# TODO: see if there is potentially another way to do this
-	docker_config = config.DockerConfig
-	docker_config.LXD_ADDRESS = 'https://'+ os.environ['HOST_IP'] +':8443'
-
-	app = get_app(docker_config)
-else:
-	app = get_app(config.DevConfig)
+app = get_app(config.Config)
 
 
 manager = Manager(app, with_default_commands=False)
