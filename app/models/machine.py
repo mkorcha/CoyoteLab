@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask import current_app
 from pylxd.exceptions import LXDAPIException
+
 from .. import db
 
 
@@ -57,6 +58,7 @@ class Machine(db.Model):
 		db.session.commit()
 
 		return (container, machine)
+
 
 	@staticmethod
 	def get(user, course):

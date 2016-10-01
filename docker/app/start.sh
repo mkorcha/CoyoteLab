@@ -14,4 +14,3 @@ pip install -r requirements.txt
 python manage.py db upgrade
 python manage.py lxd_init
 python manage.py run
-

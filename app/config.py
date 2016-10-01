@@ -1,7 +1,11 @@
+import datetime
 import os
-import datetime, redis
+import redis
+
 from simplekv.memory.redisstore import RedisStore
-from util.str import rand_str
+
+from .util.str import rand_str
+
 
 class Config:
 	# Flask config

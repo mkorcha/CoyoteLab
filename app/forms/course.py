@@ -1,7 +1,8 @@
 from flask_wtf import Form
 from wtforms import StringField, TextAreaField, DateField, SubmitField
 from wtforms.validators import DataRequired, URL
-from validators import IsAfter
+
+from .validators import IsAfter
 
 
 class CourseForm(Form):

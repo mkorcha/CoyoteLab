@@ -1,16 +1,19 @@
 from gevent import monkey
 monkey.patch_all()
 
-import time, os
-from io import BytesIO
-from zipfile import ZipFile, ZIP_DEFLATED
+import time
+import os
+
 from datetime import datetime
 from flask import Blueprint, request, redirect, url_for, abort, render_template, current_app, send_file
+from io import BytesIO
 from werkzeug.exceptions import BadRequest
 from wssh import WSSHBridge
-from ..util.auth import authenticated, session_user
-from ..models import Course, Machine, User
+from zipfile import ZipFile, ZIP_DEFLATED
+
 from .. import db
+from ..models import Course, Machine, User
+from ..util.auth import authenticated, session_user
 
 
 blueprint = Blueprint('workspace', __name__, url_prefix='/workspace')
@@ -39,6 +42,7 @@ def get_student(course, student_id):
 		abort(404)
 
 	return student
+
 
 @blueprint.before_request
 def filter():

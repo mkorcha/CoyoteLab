@@ -1,7 +1,7 @@
-from functools import wraps
-
 import bcrypt
+
 from flask import current_app, session, redirect, url_for
+from functools import wraps
 
 from ..models import User
 

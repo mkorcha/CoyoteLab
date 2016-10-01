@@ -1,7 +1,8 @@
 from flask import Blueprint, redirect, render_template, url_for, flash, abort
-from ..util.auth import authenticated, session_user, ROLE_STUDENT
-from ..models import Course, Enrollment
+
 from .. import db
+from ..models import Course, Enrollment
+from ..util.auth import authenticated, session_user, ROLE_STUDENT
 
 
 blueprint = Blueprint('student', __name__, url_prefix='/student')

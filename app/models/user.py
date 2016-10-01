@@ -1,7 +1,8 @@
-from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.associationproxy import association_proxy
-from .. import db
+from sqlalchemy.ext.hybrid import hybrid_property
+
 from .enrollment import Enrollment
+from .. import db
 
 
 class User(db.Model):

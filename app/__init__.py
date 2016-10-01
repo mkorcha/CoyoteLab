@@ -1,10 +1,12 @@
 import os
+
 from flask import Flask
 from flask_kvsession import KVSessionExtension
+from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CsrfProtect
-from flask_mail import Mail
+
 
 db = SQLAlchemy()
 migrate = Migrate()
