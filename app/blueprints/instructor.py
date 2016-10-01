@@ -21,7 +21,7 @@ def get_course(course_id):
 	'''
 	course = Course.query.filter_by(id=course_id, instructor=session_user()).first()
 
-	if course == None:
+	if course is None:
 		abort(404)
 
 	return course
@@ -110,7 +110,7 @@ def add_student(course_id):
 	if form.validate_on_submit():
 		user = User.query.filter_by(email=form.email.data).first()
 
-		if user == None:
+		if user is None:
 			# TODO: this may need to be more generalized, as the next view also
 			# uses something similar
 			user = User()
@@ -161,7 +161,7 @@ def add_many_students(course_id):
 
 			user = User.query.filter_by(email=email).first()
 
-			if user == None:
+			if user is None:
 				user = User()
 				password = rand_str(12)
 
@@ -200,7 +200,7 @@ def toggle_enrollment(course_id, user_id):
 
 	# make sure the user is part of the course and that the instructor is in 
 	# fact the owner of the course
-	if enrollment == None or enrollment.course.instructor != session_user():
+	if enrollment is None or enrollment.course.instructor != session_user():
 		abort(404)
 
 	enrollment.enabled = not enrollment.enabled

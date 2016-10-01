@@ -122,7 +122,7 @@ def lxd_init():
 @manager.command
 def adduser(user_type, email, password=None, name=''):
 	'Generate user'
-	gen_password = rand_str(8) if password == None else password
+	gen_password = rand_str(8) if password is None else password
 
 	user = User()
 	user.username = email

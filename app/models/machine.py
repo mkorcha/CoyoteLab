@@ -32,7 +32,7 @@ class Machine(db.Model):
 		
 		pair = Machine.get(user, course)
 
-		if pair != None:
+		if pair is not None:
 			return pair
 
 		name = current_app.config['USER_CONTAINER_NAME'].format(course_id=course.id, user_id=user.id)
@@ -57,7 +57,7 @@ class Machine(db.Model):
 		db.session.add(machine)
 		db.session.commit()
 
-		return (container, machine)
+		return container, machine
 
 
 	@staticmethod
@@ -76,7 +76,7 @@ class Machine(db.Model):
 
 		try:
 			container = lxd.containers.get(name)
-			return (container, Machine.query.filter_by(name=name).first())
+			return container, Machine.query.filter_by(name=name).first()
 		except LXDAPIException:
 			return None
 			

@@ -16,7 +16,7 @@ def get_course(course_id):
 	course = Course.query.get(course_id)
 	user = session_user()
 
-	if course == None or not course in user.enrolled or not user.active_in(course):
+	if course is None or not course in user.enrolled or not user.active_in(course):
 		abort(404)
 
 	return course

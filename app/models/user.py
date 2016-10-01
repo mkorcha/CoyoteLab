@@ -69,4 +69,4 @@ class User(db.Model):
 		Returns whether a user is active in a course or not via the association
 		table
 		'''
-		return Enrollment.query.filter_by(user=self, course=course, enabled=True).first() != None
+		return Enrollment.query.filter_by(user=self, course=course, enabled=True).first() is not None

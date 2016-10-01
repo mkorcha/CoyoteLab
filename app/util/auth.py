@@ -45,7 +45,8 @@ def authenticated():
 	'''
 	Returns if the user is authenticated 
 	'''
-	return 'user' in session and session['user'] != None
+	return 'user' in session and session['user'] is not None
+
 
 def pwhash(password):
 	'''

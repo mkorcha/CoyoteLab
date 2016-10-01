@@ -27,7 +27,7 @@ def get_course(course_id):
 	course = Course.query.get(course_id)
 	user = session_user()
 
-	if course == None or (course.instructor != user and not user.active_in(course)):
+	if course is None or (course.instructor != user and not user.active_in(course)):
 		abort(404)
 
 	return course
@@ -38,7 +38,7 @@ def get_student(course, student_id):
 	'''
 	student = User.query.get(student_id)
 
-	if student == None or course.instructor != session_user() or not student.active_in(course):
+	if student is None or course.instructor != session_user() or not student.active_in(course):
 		abort(404)
 
 	return student

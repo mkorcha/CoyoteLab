@@ -1,7 +1,7 @@
 from wtforms.validators import ValidationError
 
 
-class IsAfter():
+class IsAfter:
 	'''
 	Validator that verifies the DateField being validated is after the given
 	field

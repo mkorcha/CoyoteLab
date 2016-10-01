@@ -25,7 +25,7 @@ class Config:
 	SECRET_KEY = rand_str(32)
 	SESSION_COOKIE_NAME = 'coyotelab'
 	SESSION_KEY_BITS = 256
-	SESSION_STORE = SESSION_STORE = RedisStore(redis.StrictRedis(host='redis'))
+	SESSION_STORE = RedisStore(redis.StrictRedis(host='redis'))
 
 	# Database config
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
