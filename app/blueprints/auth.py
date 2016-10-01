@@ -109,7 +109,7 @@ def forgot_password():
 			user.password = password
 			user.temporary_pw = True
 
-			message = Email(subject='Password Reset', recipients=[user.email], html=render_template('email/reset_pw.jinja', password=password, url=current_app.config['MAIL_BASE_URL'] + url_for('auth.login')))
+			message = Email(subject='[CoyoteLab] Password Reset', recipients=[user.email], html=render_template('email/reset_pw.jinja', password=password, url=current_app.config['MAIL_BASE_URL'] + url_for('auth.login')))
 
 			db.session.commit()
 
