@@ -35,21 +35,47 @@
 			{% endif %}
 
 			{% block main %}
-				<h2>CSE 201-01</h2>
-				<h3>David Turner, PhD</h3>
+				<h2>Linux Containers for Educational Use</h2>
 
 				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ex eros, iaculis sed turpis varius, sodales maximus dolor. Sed a neque in lacus accumsan rutrum non at est. Pellentesque lacinia massa non ipsum varius, ut ultrices diam ornare. Maecenas porttitor ipsum non cursus finibus. Pellentesque arcu ipsum, posuere sit amet luctus eget, ullamcorper tincidunt diam. Proin id neque condimentum, commodo nisl id, ultricies tellus. Aliquam venenatis, sapien sit amet elementum elementum, lacus diam aliquet ex, nec sagittis lectus quam hendrerit nisi. Sed iaculis, ante vitae venenatis tristique, mauris arcu aliquam metus, eu imperdiet ligula dui vitae enim. Integer pretium ut urna ac consequat. 
+					CoyoteLab is an exploration in the use of Linux container technology as a means to simplify the way students in computing fields access and complete laboratory work in their educational career. This project provides two main benefits: creating a simple way for students to log in and access their coursework without anything more than their web browser, and providing course instructors a way to verify that assigned work is completed successfully. 
 				</p>
 				<p>
-					Proin suscipit urna sit amet tortor molestie consectetur. Vivamus placerat, elit ut dictum ornare, sapien ante fermentum libero, vitae tempus turpis ante eget nunc. Integer dictum ornare sapien id porttitor. Aenean eu nunc porta, auctor eros a, placerat est. Duis et magna libero. Ut ut consequat quam. Integer a tortor ac leo egestas pulvinar. 
+					To gain instructor access, contact the person in charge of the servers where CoyoteLab is being hosted. Students, if your instructor chooses to use CoyoteLab, you will receive an email with login credentials if you do not have an account already.
 				</p>
+
+				<h2>FAQ</h2>
+
+				<p>
+					<strong>What do the buttons on the right side of the workspace do?</strong> 
+
+					The top button will reload the page (and reboot the container). The second button will download all of the files out of your home directory in your container. The bottom-most button will reset your container to a base state. Keep in mind if you do this, you should probably save a copy of your files first. Otherwise, you will lose all of your work.
+				</p>
+				<p>
+					<strong>What happens when a student's course is dropped?</strong> 
+
+					If a student is dropped, they will lose access to their container and be unable to view any information about the course. The student can be re-added by the instructor at any time.
+				</p>
+				<p>
+					<strong>What can the instructor access of the students?</strong> 
+
+					An instructor has access to a student's workspace and has the ability to download all of their files. However, an instructor cannot reset a student's container.
+				</p>
+				<p>
+					<strong>"Connection reset by peer. Please refresh." or "An error has occurred. Please refresh."</strong> 
+
+					Sometimes a strange error will occur when certain responses come in from the container. This is most noticable when using a utility like <code>htop</code>. Simply reload the page or use the reload button and you should be able to get back in without issue.
+				</p>
+				<p>
+					<strong>Where can I get the source code?</strong> 
+
+					<p>The source, as well as installation and configuration instructions, can be found on <a href="https://github.com/mkorcha/CoyoteLab">GitHub</a>. CoyoteLab is released under the <a href="https://tldrlegal.com/license/mit-license">MIT License</a>.
 			{% endblock %}
 			</main>
 
 			<footer>
-				Master's project by Mike Korcha, 2016<br>
-				California State University, San Bernardino
+				Copyright &copy; Michael Korcha 2016<br />
+				Created as a project in partial fulfillment of the degree Master of Science in Computer Science at California State University, San Bernardino.
 			</footer>
 		</div>
 
