@@ -40,7 +40,7 @@ requests==2.11.1
 requests-unixsocket==0.1.5
 simplekv==0.10.0
 six==1.10.0
-urllib3==1.17
+urllib3==1.26.5
 ws4py==0.3.4
 wsgiref==0.1.2
 wssh==0.1.0
